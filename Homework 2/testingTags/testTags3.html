@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <title> map area caption th tbody thead tfoot label select datalist optgroup option textarea output progress meter fieldset legend script noscript canvas SVG</title>
+  </head>
+
+  <body>
+      <h1>HTML TAGS EXAMPLE USAGE</h1>
+      <p>Click on the image below to go somewhere warmer</p>
+      <img src="http://assets.worldwildlife.org/photos/2325/images/hero_small/mountains-hero.jpg?1345838509" width="145" height="126" alt="mtn" usemap="#mtnmap">
+    
+      <map name="mtnmap">
+        <area shape="rect" coords="0,0,145,126" alt="Sun" href="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Loboc_river.png/220px-Loboc_river.png">
+      </map>
+    
+      <table>
+        <caption>Superbowl Wins</caption>
+        <thead>
+          <tr>
+            <th>Patriots</th>
+            <th>Falcons</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>4</td>
+            <td>0</td>
+          </tr>
+        </tbody> 
+        <tfoot>
+          <tr>
+            <td>AFC</td>
+            <td>NFC</td>
+          </tr>
+        </tfoot>  
+      </table> 
+
+    <p>Who will win?</p>
+
+    <form>
+      <label>Patriots</label>
+      <input type="radio" name="winner" id="ne" value="ne"><br>
+      <label>Falcons</label>
+      <input type="radio" name="winner" id="atl" value="atl"><br>
+    </form>
+    
+    <p>Your favorite team is...</p>
+    <select>
+      <optgroup label="AFC Teams">
+        <option value="ne">Patriots</option>
+        <option value="pitt">Steelers</option>
+      </optgroup>
+      <optgroup label="NFC Teams">
+        <option value="gb">Packers</option>
+        <option value="atl">Falcons</option>
+      </optgroup>
+    </select>
+    
+    <p>A simple calculator:</p>
+    <form oninput="x.value=parseInt(a.value)+parseInt(b.value)">
+      <input type="number" id="a" value="0">
+      +<input type="number" id="b" value="0">
+      =<output name="x" for="a b"></output>
+    </form> 
+    
+    <p>Checkout</p>
+    <form>
+     <fieldset>
+      <legend>Credit Card Information</legend>
+      Card Number: <input type="text"><br>
+      CCV: <input type="text"><br>
+      </fieldset>
+      <fieldset>
+      <legend>Shipping Address</legend>
+      Street Address: <input type="text"><br>
+      Zip Code: <input type="text"><br>
+     </fieldset>
+    </form>
+
+    <p>We are about 66% done with these examples </p>
+    <progress value="66" max="100">
+    </progress>
+    
+    <meter value="0.66">66%</meter>
+    
+    <p>Your favorite car is ...</p>
+     <select id="fav">
+      <option value="BMW">BMW</option>
+      <option value="AUDI">Audi</option>
+      <option value="FERRARI">Ferrari</option>
+    </select>
+    <br />
+    <textarea rows="4" cols="25">Describe why you chose that car.
+    </textarea> 
+    <br />
+    
+    <p>Here's a canvas filled with text of your chosen car</p>
+    <canvas id="can"></canvas>   
+    <script>
+      var canvas = document.getElementById("can");
+      var car = document.getElementById("fav").value;
+      var ctx = canvas.getContext("2d");
+      ctx.font = "30px Arial";
+      ctx.fillText(car,10,50);    
+    </script>
+    
+    <noscript>Install/enable JavaScript to view the above canvas correctly</noscript>
+    <br />
+    <p>SVG is an alternative graphics model to the canvas tag</p> 
+    <svg width="100" height="100">
+      <circle cx="50" cy="50" r="40"/>
+    </svg>
+   
+    <p>Now with autofill! Your favorite car is...(still gotta choose one of the above 3)</p>
+    <input list="cars">
+    <datalist id="cars">
+      <option value="BMW">
+      <option value="Audi">
+      <option value="Ferrari">
+    </datalist>
+  </body>
+</html>
