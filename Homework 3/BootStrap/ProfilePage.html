@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<!-- Profile Page -->
+<html>
+
+<head>
+    <title> Profile - Memento </title>
+    <style>
+        nav#header-bar {
+            border-bottom: 1px solid gray;
+            background-color: #D3D3D3;
+            margin-bottom: 50px;
+            height: 40px;
+        }
+        
+        div#memento {
+            text-align: center;
+            font-family: cursive;
+            font-style: italic;
+            font-size: 20pt;
+        }
+        
+        a#home {
+            float: left;
+        }
+        
+        div#home-button {
+            margin-left: 5px;
+            margin-top: 2px;
+        }
+        
+        textarea#info {
+            height: 230px;
+            width: 100%;
+            overflow-y: scroll;
+            resize: none;
+        }
+        
+        img#pf-pic {
+            height: 250px;
+            width: 250px;
+        }
+		body {
+			background: url(images/profile-background.jpg) no-repeat center center fixed;
+			-webkit-background-size: cover;
+			-moz-background-size: cover;
+			-o-background-size: cover;
+			background-size: cover;
+		}
+		.panel-body {
+			background-color: rgb(200,200,200);
+		}
+		
+    </style>
+    <link type="text/css" rel="stylesheet" href="https://getbootstrap.com/dist/css/bootstrap.css" />
+</head>
+
+<body>
+    <header>
+        <nav id="header-bar">
+            <a id="home" href="HomePage.html">
+                <div class="btn btn-primary btn-block" id="home-button">Home</div>
+            </a>
+            <div id="memento">Memento</div>
+        </nav>
+    </header>
+    <main>
+        <div class="container">
+            <div class="panel-group">
+                <div class="panel panel-primary">
+                    <div class="panel-heading text-center">User Bio</div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <img class="img-responsive" src="https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSU65VKl6b2SsfdW4lggc_3qHyAfNn7AlTrsoOKxo72_Mw9jMtOKWFolsw" alt="Mountain View" id="pf-pic">
+                            </div>
+                            <div class="col-sm-9">
+                                Name Of User
+                                <br>
+                                <textarea id="info"> Please add a short bio about yourself!</textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-primary">
+                    <div class="panel-heading">Achievements</div>
+                    <div class="panel-body">
+                        <table>
+                            <tr>
+                                <td><img class="img-responsive" src="http://www.clipartkid.com/images/120/gold-metal-seal-or-stamp-with-gold-metal-seal-or-stamp-with-banner-sLXuHW-clipart.jpg" alt="achievement"></td>
+                                <td><img class="img-responsive" src="http://www.clipartkid.com/images/120/gold-metal-seal-or-stamp-with-gold-metal-seal-or-stamp-with-banner-sLXuHW-clipart.jpg" alt="achievement"></td>
+                                <td><img class="img-responsive" src="http://www.clipartkid.com/images/120/gold-metal-seal-or-stamp-with-gold-metal-seal-or-stamp-with-banner-sLXuHW-clipart.jpg" alt="achievement"></td>
+                                <td><img class="img-responsive" src="http://www.clipartkid.com/images/120/gold-metal-seal-or-stamp-with-gold-metal-seal-or-stamp-with-banner-sLXuHW-clipart.jpg" alt="achievement"></td>
+                                <td><img class="img-responsive" src="http://www.clipartkid.com/images/120/gold-metal-seal-or-stamp-with-gold-metal-seal-or-stamp-with-banner-sLXuHW-clipart.jpg" alt="achievement"></td>
+                                <td><img class="img-responsive" src="http://www.clipartkid.com/images/120/gold-metal-seal-or-stamp-with-gold-metal-seal-or-stamp-with-banner-sLXuHW-clipart.jpg" alt="achievement"></td>
+                                <td><img class="img-responsive" src="http://www.clipartkid.com/images/120/gold-metal-seal-or-stamp-with-gold-metal-seal-or-stamp-with-banner-sLXuHW-clipart.jpg" alt="achievement"></td>
+                                <td><img class="img-responsive" src="http://www.clipartkid.com/images/120/gold-metal-seal-or-stamp-with-gold-metal-seal-or-stamp-with-banner-sLXuHW-clipart.jpg" alt="achievement"></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script type="text/javascript" src="https://code.jquery.com/jquery.min.js"></script>
+    <script type="text/javascript" src="https://getbootstrap.com/dist/js/bootstrap.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<!-- Future Trips Popup -->
+<html>
+
+<head>
+    <title> Homepage - Memento </title>
+    <style>
+        div#header-bar {
+            border-bottom: 1px solid gray;
+            background-color: #D3D3D3;
+            margin-bottom: 50px;
+            height: 40px;
+        }
+        
+        div#memento {
+            text-align: center;
+            font-family: cursive;
+            font-style: italic;
+            font-size: 20pt;
+        }
+        
+        a#home {
+            float: left;
+        }
+        
+        td#nav-bar {
+            vertical-align: top;
+        }
+        
+        div.nav-button {
+            width: 110px;
+            border: 2px solid black;
+            border-radius: 3px;
+            padding: 5px;
+            padding-left: 10px;
+            padding-right: 10px;
+            margin-bottom: 15px;
+            color: black;
+            cursor: pointer;
+        }
+        
+        div#home-button {
+            border: 2px solid black;
+            border-radius: 3px;
+            padding: 5px;
+            padding-left: 10px;
+            padding-right: 10px;
+            margin-top: 4px;
+            margin-left: 10px;
+            color: black;
+        }
+        
+        a:link {
+            text-decoration: none;
+        }
+        
+        main {
+            border-left: thin solid black;
+            margin-left: 2.5%;
+        }
+        
+        td.img-panel {
+            text-align: center;
+            font-weight: bold;
+            font-style: italic;
+            font-size: 18pt;
+        }
+        
+        div.memories {
+            margin-bottom: 40px;
+            margin-left: 20px;
+        }
+        
+        .arrows {
+            height: 50px;
+            width: 50px;
+        }
+        
+        table.img-table td img {
+            margin: 10px;
+        }
+        
+        img.memory-pic {
+            width: 300px;
+            height: 300px;
+        }
+        
+        td.place-info {
+            text-align: center;
+            padding-left: 10px;
+        }
+        
+        .field {
+            width: 100%;
+            margin: 5px;
+            text-align: center;
+        }
+      
+        /* The Modal (background) */      
+        .modal {
+            display: none;
+            /* Hidden by default */
+            position: fixed;
+            /* Stay in place */
+            z-index: 1;
+            /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%;
+            /* Full width */
+            height: 100%;
+            /* Full height */
+            overflow: auto;
+            /* Enable scroll if needed */
+            background-color: rgb(0, 0, 0);
+            /* Fallback color */
+            background-color: rgba(0, 0, 0, 0.4);
+            /* Black w/ opacity */
+        }
+        
+        .modal1 {
+            display: none;
+            /* Hidden by default */
+            position: fixed;
+            /* Stay in place */
+            z-index: 1;
+            /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%;
+            /* Full width */
+            height: 100%;
+            /* Full height */
+            overflow: auto;
+            /* Enable scroll if needed */
+            background-color: rgb(0, 0, 0);
+            /* Fallback color */
+            background-color: rgba(0, 0, 0, 0.4);
+            /* Black w/ opacity */
+        }
+        /* Modal Content/Box */
+        
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            /* 15% from the top and centered */
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            /* Could be more or less, depending on screen size */
+        }
+        /* The Close Button */
+        
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        
+        .close1 {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div id="header-bar">
+            <a id="home" href="HomePage.html">
+                <div id="home-button">Home</div>
+            </a>
+            <div id="memento">Memento</div>
+        </div>
+    </header>
+
+    <table>
+        <tr>
+            <td id="nav-bar">
+                <nav>
+                    <div class="nav-button" id="make-memories-btn">
+                        Make Memories
+                    </div>
+
+                    <a href="ProfilePage.html">
+                        <div class="nav-button">My Profile</div>
+                    </a>
+                    <a href="LogInPage.html">
+                        <div class="nav-button">Logout</div>
+                    </a>
+                </nav>
+            </td>
+            <td>
+                <main>
+                    <div class="memories">
+                        <table>
+                            <tr>
+                                <td>
+                                    <a href="#"><img class="arrows" src="https://maxcdn.icons8.com/Share/icon/Arrows//angle_left1600.png" alt="arrow" /></a>
+                                </td>
+                                <td class="img-panel">My Memories
+                                    <table class="img-table">
+                                        <tr>
+                                            <td>
+                                                <img id="view-memories-btn" src="https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSU65VKl6b2SsfdW4lggc_3qHyAfNn7AlTrsoOKxo72_Mw9jMtOKWFolsw" alt="Mountain View">
+                                            </td>
+                                            <td>
+                                                <img src="https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSU65VKl6b2SsfdW4lggc_3qHyAfNn7AlTrsoOKxo72_Mw9jMtOKWFolsw" alt="Mountain View">
+                                            </td>
+                                            <td>
+                                                <img src="https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSU65VKl6b2SsfdW4lggc_3qHyAfNn7AlTrsoOKxo72_Mw9jMtOKWFolsw" alt="Mountain View">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <img src="https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSU65VKl6b2SsfdW4lggc_3qHyAfNn7AlTrsoOKxo72_Mw9jMtOKWFolsw" alt="Mountain View">
+                                            </td>
+                                            <td>
+                                                <img src="https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSU65VKl6b2SsfdW4lggc_3qHyAfNn7AlTrsoOKxo72_Mw9jMtOKWFolsw" alt="Mountain View">
+                                            </td>
+                                            <td>
+                                                <img src="https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSU65VKl6b2SsfdW4lggc_3qHyAfNn7AlTrsoOKxo72_Mw9jMtOKWFolsw" alt="Mountain View">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <img src="https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSU65VKl6b2SsfdW4lggc_3qHyAfNn7AlTrsoOKxo72_Mw9jMtOKWFolsw" alt="Mountain View">
+                                            </td>
+                                            <td>
+                                                <img src="https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSU65VKl6b2SsfdW4lggc_3qHyAfNn7AlTrsoOKxo72_Mw9jMtOKWFolsw" alt="Mountain View">
+                                            </td>
+                                            <td>
+                                                <img src="https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSU65VKl6b2SsfdW4lggc_3qHyAfNn7AlTrsoOKxo72_Mw9jMtOKWFolsw" alt="Mountain View">
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                                <td>
+                                    <a href="#"><img src="https://maxcdn.icons8.com/Share/icon/Arrows//angle_right1600.png" class="arrows" alt="arrow" /></a>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div class="memories">
+                        <table>
+                            <tr>
+                                <td>
+                                    <a href="#"><img src="https://maxcdn.icons8.com/Share/icon/Arrows//angle_left1600.png" class="arrows" alt="arrow" /></a>
+                                </td>
+                                <td class="img-panel"> Future Memories
+                                    <table class="img-table">
+                                        <tr>
+                                            <td>
+                                                <img src="https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSU65VKl6b2SsfdW4lggc_3qHyAfNn7AlTrsoOKxo72_Mw9jMtOKWFolsw" alt="Mountain View">
+                                            </td>
+                                            <td>
+                                                <img src="https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSU65VKl6b2SsfdW4lggc_3qHyAfNn7AlTrsoOKxo72_Mw9jMtOKWFolsw" alt="Mountain View">
+                                            </td>
+                                            <td>
+                                                <img src="https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSU65VKl6b2SsfdW4lggc_3qHyAfNn7AlTrsoOKxo72_Mw9jMtOKWFolsw" alt="Mountain View">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <img src="https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSU65VKl6b2SsfdW4lggc_3qHyAfNn7AlTrsoOKxo72_Mw9jMtOKWFolsw" alt="Mountain View">
+                                            </td>
+                                            <td>
+                                                <img src="https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSU65VKl6b2SsfdW4lggc_3qHyAfNn7AlTrsoOKxo72_Mw9jMtOKWFolsw" alt="Mountain View">
+                                            </td>
+                                            <td>
+                                                <img src="https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSU65VKl6b2SsfdW4lggc_3qHyAfNn7AlTrsoOKxo72_Mw9jMtOKWFolsw" alt="Mountain View">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <img src="https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSU65VKl6b2SsfdW4lggc_3qHyAfNn7AlTrsoOKxo72_Mw9jMtOKWFolsw" alt="Mountain View">
+                                            </td>
+                                            <td>
+                                                <img src="https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSU65VKl6b2SsfdW4lggc_3qHyAfNn7AlTrsoOKxo72_Mw9jMtOKWFolsw" alt="Mountain View">
+                                            </td>
+                                            <td>
+                                                <img src="https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSU65VKl6b2SsfdW4lggc_3qHyAfNn7AlTrsoOKxo72_Mw9jMtOKWFolsw" alt="Mountain View">
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                                <td>
+                                    <a href="#"><img src="https://maxcdn.icons8.com/Share/icon/Arrows//angle_right1600.png" class="arrows" alt="arrow" /></a>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </main>
+            </td>
+        </tr>
+    </table>
+
+    <div id="myModal" class="modal">
+        <!-- Modal content -->
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div>
+                <table>
+                    <tr>
+                        <td>
+                            <img class="memory-pic" src="images/modal-pic.jpg" alt="location-pic" />
+                        </td>
+                        <td id="place-info">
+                            <form action="HomePage.html" method="POST">
+                                <input class="field" type="text" placeholder="Name">
+                                <br>
+                                <input class="field" type="text" placeholder="Tags">
+                                <br>
+                                <input class="field" type="text" placeholder="Description">
+                                <br>
+                                <input class="field" type="number" placeholder="Rate Place From 1 to 10">
+                                <br>
+                                <select class="field" name="ordinal">
+                                    <option value="" selected>Choose a City</option>
+                                    <option value="los-angeles">Los Angeles</option>
+                                    <option value="san-francisco">San Francisco</option>
+                                    <option value="sacramento">Sacramento</option>
+                                    <option value="san-diego">San Diego</option>
+                                </select>
+                                <br>
+                                <div class="field">
+                                    <label for="not-visited"> Not Visited</label>
+                                    <input type="radio" id="not-visited" name="visited" value="false" checked>
+                                    <br>
+                                    <label for="visited"> Visited</label>
+                                    <input type="radio" id="visited" name="visited" value="true">
+                                </div>
+
+                                <br>
+                                <input class="field" type="submit" value="Add">
+                            </form>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- The Modal1 -->
+    <div id="myModal1" class="modal">
+        <!-- Modal1 content -->
+        <div class="modal-content">
+            <span class="close1">&times;</span>
+            <div>
+                <table>
+                    <tr>
+                        <td>
+                            <img class="memory-pic" src="images/modal-pic.jpg" alt="location-pic" />
+                        </td>
+                        <td class="place-info">
+                            <form action="HomePage.html" method="POST">
+                                <input class="field" type="text" placeholder="Name">
+                                <br>
+                                <input class="field" type="text" placeholder="Tags">
+                                <br>
+                                <input class="field" type="text" placeholder="Description">
+                                <br>
+                                <input class="field" type="number" placeholder="Rate Place From 1 to 10">
+                                <br>
+                                <select class="field" name="ordinal">
+                                    <option value="" selected>Choose a City</option>
+                                    <option value="los-angeles">Los Angeles</option>
+                                    <option value="san-francisco">San Francisco</option>
+                                    <option value="sacramento">Sacramento</option>
+                                    <option value="san-diego">San Diego</option>
+                                </select>
+                                <br>
+                                <div class="field">
+                                    <label for="view-not-visited"> Not Visited</label>
+                                    <input type="radio" id="view-not-visited" name="visited" value="false" checked>
+                                    <br>
+                                    <label for="view-visited"> Visited</label>
+                                    <input type="radio" id="view-visited" name="visited" value="true">
+                                </div>
+
+                                <br>
+                                <input class="field" type="submit" value="Save">
+                            </form>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Get the modal
+        var modal = document.getElementById('myModal');
+
+        // Get the button that opens the modal
+        var btn = document.getElementById("make-memories-btn");
+
+        // Get the <span> element that closes the modal
+        var span = document.getElementsByClassName("close")[0];
+
+        // When the user clicks the button, open the modal 
+        btn.onclick = function() {
+            modal.style.display = "block";
+        }
+
+        // When the user clicks on <span> (x), close the modal
+        span.onclick = function() {
+            modal.style.display = "none";
+        }
+
+        // -----------------------------------------------------------------------
+        // Get the modal
+        var modal1 = document.getElementById('myModal1');
+
+        // Get the button that opens the modal
+        var btn1 = document.getElementById("view-memories-btn");
+
+        // Get the <span> element that closes the modal
+        var span1 = document.getElementsByClassName("close1")[0];
+
+        // When the user clicks the button, open the modal 
+        btn1.onclick = function() {
+            modal1.style.display = "block";
+        }
+
+        // When the user clicks on <span> (x), close the modal
+        span1.onclick = function() {
+            modal1.style.display = "none";
+        }
+
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function(event) {
+            if (event.target == modal || event.target == modal1) {
+                modal.style.display = "none";
+                modal1.style.display = "none";
+            }
+        }
+    </script>
+</body>
+
+</html>

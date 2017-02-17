@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<!-- Profile Page -->
+<html>
+<head>
+  <title> Profile - Memento </title>
+  <style>
+    nav#header-bar {
+      border-bottom: 1px solid gray;
+      background-color: #D3D3D3;
+      margin-bottom: 50px;
+      height: 40px;
+    }
+    div#memento {
+      text-align: center;
+      font-family: cursive;
+      font-style: italic;
+      font-size: 20pt;
+    }
+    a#home {
+      float: left;
+    }
+    div#home-button {
+      border: 2px solid black;
+      border-radius: 3px;
+      padding: 5px;
+      padding-left: 10px;
+      padding-right: 10px;
+      margin-top: 4px;
+      margin-left: 10px;
+      color: black;
+    }
+        
+    a:link {
+      text-decoration: none;
+    }
+    .achievement-image{
+      width:70px;
+      height:70px
+    }
+    main {
+      padding: 5px 10px 5px 10px;
+      width:100%;
+    }
+    div#top-panel{
+      margin-bottom:15px;
+    }
+    div#top-panel table td img {
+      margin: 15px;
+    }
+    td#user-info{
+      text-align: center;
+    }
+    textarea#info{
+      margin: 10px;
+      height: 230px;
+      width: 300px;
+      overflow-y: scroll;
+      resize: none;
+    }
+    #achievements-table{
+      border: 1px solid black; 
+      border-radius: 3px;
+    }
+    img#pf-pic{
+      height: 250px;
+      width: 250px;
+    }
+	body {
+		background: url(images/profile-background.jpg) no-repeat center center fixed;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
+    }
+	span#name, span#achievements {
+		color: white;
+	}
+  </style>
+</head>
+
+<body>
+    <header>
+        <nav id="header-bar">
+            <a id="home" href="HomePage.html">
+                <div id="home-button">Home</div>
+            </a>
+            <div id="memento">Memento</div>
+        </nav>
+    </header>
+    <main>
+        <div id="top-panel">
+          <table>
+            <tr>
+              <td>
+                 <img src="https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSU65VKl6b2SsfdW4lggc_3qHyAfNn7AlTrsoOKxo72_Mw9jMtOKWFolsw"  alt="Mountain View" id="pf-pic">
+              </td>
+              <td id="user-info">
+                 <span id="name">Name Of User</span> <br>
+                 <textarea id="info"> Please add a short bio about yourself!</textarea>
+              </td>
+            </tr>
+          </table>
+        </div>
+        <div>
+        <span id="achievements">Achievements</span>
+          <table id="achievements-table">
+            <tr>
+              <td><img src="http://www.clipartkid.com/images/120/gold-metal-seal-or-stamp-with-gold-metal-seal-or-stamp-with-banner-sLXuHW-clipart.jpg" alt="achievement" class="achievement-image"></td>
+              <td><img src="http://www.clipartkid.com/images/120/gold-metal-seal-or-stamp-with-gold-metal-seal-or-stamp-with-banner-sLXuHW-clipart.jpg" alt="achievement" class="achievement-image"></td>
+              <td><img src="http://www.clipartkid.com/images/120/gold-metal-seal-or-stamp-with-gold-metal-seal-or-stamp-with-banner-sLXuHW-clipart.jpg" alt="achievement" class="achievement-image"></td>
+              <td><img src="http://www.clipartkid.com/images/120/gold-metal-seal-or-stamp-with-gold-metal-seal-or-stamp-with-banner-sLXuHW-clipart.jpg" alt="achievement" class="achievement-image"></td>
+              <td><img src="http://www.clipartkid.com/images/120/gold-metal-seal-or-stamp-with-gold-metal-seal-or-stamp-with-banner-sLXuHW-clipart.jpg" alt="achievement" class="achievement-image"></td>
+              <td><img src="http://www.clipartkid.com/images/120/gold-metal-seal-or-stamp-with-gold-metal-seal-or-stamp-with-banner-sLXuHW-clipart.jpg" alt="achievement" class="achievement-image"></td>
+              <td><img src="http://www.clipartkid.com/images/120/gold-metal-seal-or-stamp-with-gold-metal-seal-or-stamp-with-banner-sLXuHW-clipart.jpg" alt="achievement" class="achievement-image"></td>
+              <td><img src="http://www.clipartkid.com/images/120/gold-metal-seal-or-stamp-with-gold-metal-seal-or-stamp-with-banner-sLXuHW-clipart.jpg" alt="achievement" class="achievement-image"></td>
+            </tr>
+            
+          </table>
+        </div>
+    </main>
+
+  
+    
+</body>
+
+</html>
+

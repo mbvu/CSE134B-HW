@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<!-- Log in Page -->
+<html>
+<head>
+  <title> Log in - Memento </title>
+  <style>
+    h1#title {
+		font-family: cursive; 
+		font-style: italic; 
+		text-align: center; 
+		font-size: 80pt; 
+		color:white
+	}
+    form#userinfo {
+		display: inline-block;
+		text-align: center; 
+		width: 100%; 
+		opacity: 0.7; 
+		margin-bottom: 10px;
+	}
+    input.info {
+		margin-bottom: 10px; 
+		width: 250px; 
+		height: 30px; 
+		padding-left: 10px;
+	}
+    input.submit {
+		width: 265px;
+		height: 30px;
+		padding-left: 10px;
+	}
+	body {
+		background: url(images/memento-background.jpeg) no-repeat center center fixed;
+		-webkit-background-size: cover;
+		-moz-background-size: cover;
+		-o-background-size: cover;
+		background-size: cover;
+	}
+    form#registration {text-align:center; opacity: 0.7;}
+  </style>
+</head>
+
+<body>
+    <h1 id="title">Memento</h1>
+    
+    <main>
+        <form id="userinfo" action="HomePage.html" method="POST">
+          <input id="email" class="info" type="email" placeholder="Email Address"> 
+          <br>
+          <input id="psw" class="info" type="password" placeholder="Password">
+          <br>
+          <input type="submit" class="submit" value="Login">
+        </form>
+        <form id="registration" action="RegisterPage.html" method="GET">
+          <input type="submit" class="submit" value="Create New Account">
+        </form>
+    </main>
+</body>
+
+</html>
+

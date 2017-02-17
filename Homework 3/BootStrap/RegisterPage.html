@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<!-- Register Page -->
+<html>
+<head>
+  <title> Register - Memento </title>
+  <style>
+        h1#title {
+            font-family: cursive;
+            font-style: italic;
+            text-align: center;
+            font-size: 80pt;
+            color: white;
+            margin-bottom: 40px;
+        }
+        
+        body {
+			background: url(images/memento-background.jpeg) no-repeat center center fixed;
+			-webkit-background-size: cover;
+			-moz-background-size: cover;
+			-o-background-size: cover;
+			background-size: cover;
+		}
+        .opaque {
+            opacity: .70;
+        }
+		input#register-btn {
+			margin-bottom: 10px;
+		}
+        #register{
+          color:white;
+        }
+    </style>
+    <link type="text/css" rel="stylesheet" href="https://getbootstrap.com/dist/css/bootstrap.css" />
+</head>
+
+<body>
+    <h1 id="title">Memento</h1>
+    <main class="container">
+        <div class="row justify-content-md-end text-center">
+            
+            <div class="col-sm-4 col-sm-offset-4">
+                
+                <header id="register">
+                    <h2>Register</h2>
+                </header>
+    
+                <form id="userinfo" action="HomePage.html" method="POST">
+                    <div class="form-group opaque">
+                        <input id="text" class="form-control" type="text" placeholder="Full Name">
+                    </div>
+                    <div class="form-group opaque">
+                        <input id="password" class="form-control" type="text" placeholder="Password">
+                    </div>
+                    <div class="form-group opaque">
+                        <input id="email" class="form-control" type="email" placeholder="Email Address">
+                    </div>
+                    <div class="form-group opaque">
+                        <input id="phone-number" class="form-control" type="tel" placeholder="Phone Number">
+                    </div>
+                    <input type="submit" id="register-btn" class="btn btn-default btn-block opaque" value="Register">
+                </form>
+				<form action="LogInPage.html" method="POST">
+					<input type="submit" class="btn btn-default btn-block opaque" value="Return to Login">
+				</form>
+
+            </div>
+            
+        </div>
+    </main>
+    <script type="text/javascript" src="https://code.jquery.com/jquery.min.js"></script>
+    <script type="text/javascript" src="https://getbootstrap.com/dist/js/bootstrap.js"></script>
+</body>
+
+</html>
+

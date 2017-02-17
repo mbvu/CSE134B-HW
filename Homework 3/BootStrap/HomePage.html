@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<!-- Future Trips Popup -->
+<html>
+
+<head>
+    <title> Homepage - Memento </title>
+    <link type="text/css" rel="stylesheet" href="https://getbootstrap.com/dist/css/bootstrap.css" />
+    <style>
+        div#header-bar {
+            border-bottom: 1px solid gray;
+            background-color: #D3D3D3;
+            margin-bottom: 50px;
+            height: 40px;
+        }
+        
+        div#memento {
+            text-align: center;
+            font-family: cursive;
+            font-style: italic;
+            font-size: 20pt;
+        }
+        
+        a#home {
+            float: left;
+        }
+        
+        div#home-button {
+            margin-left: 5px;
+            margin-top: 2px;
+        }
+        
+        main {
+            border-left: thin solid black;
+            margin-left: -10px;
+            padding-left: 20px;
+        }
+        
+        .img-panel {
+            font-weight: bold;
+            font-style: italic;
+            font-size: 18pt;
+        }
+        
+        table.img-table td img {
+            margin: 10px;
+        }
+        
+        .side-button {
+            margin-bottom: 10px;
+        }
+        
+        .centerBlock {
+            display: table;
+            margin: auto;
+        }
+        
+        td.place-info {
+            padding-left: 30px;
+        }
+        
+        img.memory-pic {
+            width: 250px;
+            height: 250px;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div id="header-bar">
+            <a id="home" href="HomePage.html">
+                <div class="btn btn-primary btn-block" id="home-button">Home</div>
+            </a>
+            <div id="memento">Memento</div>
+        </div>
+    </header>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-3">
+                <nav>
+                    <div class="btn btn-primary btn-block side-button" id="make-memories-btn" data-toggle="modal" data-target="#addEntry">
+                        Make Memories
+                    </div>
+
+                    <a href="ProfilePage.html">
+                        <div class="btn btn-primary btn-block side-button">My Profile</div>
+                    </a>
+                    <a href="LogInPage.html">
+                        <div class="btn btn-primary btn-block side-button">Logout</div>
+                    </a>
+                </nav>
+            </div>
+            <div class="col-sm-9">
+                <main>
+                    <div class="panel panel-info">
+                        <div class="panel-heading text-center img-panel">My Memories</div>
+                        <div class="panel-body centerBlock">
+                            <table>
+                                <tr>
+                                    <td>
+                                        <button class="glyphicon glyphicon-chevron-left btn-lg btn-info"></button>
+                                    </td>
+                                    <td class="img-panel">
+                                        <table class="img-table">
+                                            <tr>
+                                                <td>
+                                                    <img class="img-responsive" src="https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSU65VKl6b2SsfdW4lggc_3qHyAfNn7AlTrsoOKxo72_Mw9jMtOKWFolsw" alt="Mountain View" data-toggle="modal" data-target="#editEntry">
+                                                </td>
+                                                <td>
+                                                    <img class="img-responsive" src="https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSU65VKl6b2SsfdW4lggc_3qHyAfNn7AlTrsoOKxo72_Mw9jMtOKWFolsw" alt="Mountain View">
+                                                </td>
+                                                <td>
+                                                    <img class="img-responsive" src="https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSU65VKl6b2SsfdW4lggc_3qHyAfNn7AlTrsoOKxo72_Mw9jMtOKWFolsw" alt="Mountain View">
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <img class="img-responsive" src="https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSU65VKl6b2SsfdW4lggc_3qHyAfNn7AlTrsoOKxo72_Mw9jMtOKWFolsw" alt="Mountain View">
+                                                </td>
+                                                <td>
+                                                    <img class="img-responsive" src="https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSU65VKl6b2SsfdW4lggc_3qHyAfNn7AlTrsoOKxo72_Mw9jMtOKWFolsw" alt="Mountain View">
+                                                </td>
+                                                <td>
+                                                    <img class="img-responsive" src="https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSU65VKl6b2SsfdW4lggc_3qHyAfNn7AlTrsoOKxo72_Mw9jMtOKWFolsw" alt="Mountain View">
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <img class="img-responsive" src="https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSU65VKl6b2SsfdW4lggc_3qHyAfNn7AlTrsoOKxo72_Mw9jMtOKWFolsw" alt="Mountain View">
+                                                </td>
+                                                <td>
+                                                    <img class="img-responsive" src="https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSU65VKl6b2SsfdW4lggc_3qHyAfNn7AlTrsoOKxo72_Mw9jMtOKWFolsw" alt="Mountain View">
+                                                </td>
+                                                <td>
+                                                    <img class="img-responsive" src="https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSU65VKl6b2SsfdW4lggc_3qHyAfNn7AlTrsoOKxo72_Mw9jMtOKWFolsw" alt="Mountain View">
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <button class="glyphicon glyphicon-chevron-right btn-lg btn-info"></button>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="panel panel-info">
+                        <div class="panel-heading text-center img-panel">Future Memories</div>
+                        <div class="panel-body centerBlock">
+                            <table>
+                                <tr>
+                                    <td>
+                                        <button class="glyphicon glyphicon-chevron-left btn-lg btn-info btn-block"></button>
+                                    </td>
+                                    <td>
+                                        <table class="img-table">
+                                            <tr>
+                                                <td>
+                                                    <img class="img-responsive" src="https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSU65VKl6b2SsfdW4lggc_3qHyAfNn7AlTrsoOKxo72_Mw9jMtOKWFolsw" alt="Mountain View">
+                                                </td>
+                                                <td>
+                                                    <img class="img-responsive" src="https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSU65VKl6b2SsfdW4lggc_3qHyAfNn7AlTrsoOKxo72_Mw9jMtOKWFolsw" alt="Mountain View">
+                                                </td>
+                                                <td>
+                                                    <img class="img-responsive" src="https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSU65VKl6b2SsfdW4lggc_3qHyAfNn7AlTrsoOKxo72_Mw9jMtOKWFolsw" alt="Mountain View">
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <img class="img-responsive" src="https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSU65VKl6b2SsfdW4lggc_3qHyAfNn7AlTrsoOKxo72_Mw9jMtOKWFolsw" alt="Mountain View">
+                                                </td>
+                                                <td>
+                                                    <img class="img-responsive" src="https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSU65VKl6b2SsfdW4lggc_3qHyAfNn7AlTrsoOKxo72_Mw9jMtOKWFolsw" alt="Mountain View">
+                                                </td>
+                                                <td>
+                                                    <img class="img-responsive" src="https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSU65VKl6b2SsfdW4lggc_3qHyAfNn7AlTrsoOKxo72_Mw9jMtOKWFolsw" alt="Mountain View">
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <img class="img-responsive" src="https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSU65VKl6b2SsfdW4lggc_3qHyAfNn7AlTrsoOKxo72_Mw9jMtOKWFolsw" alt="Mountain View">
+                                                </td>
+                                                <td>
+                                                    <img class="img-responsive" src="https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSU65VKl6b2SsfdW4lggc_3qHyAfNn7AlTrsoOKxo72_Mw9jMtOKWFolsw" alt="Mountain View">
+                                                </td>
+                                                <td>
+                                                    <img class="img-responsive" src="https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSU65VKl6b2SsfdW4lggc_3qHyAfNn7AlTrsoOKxo72_Mw9jMtOKWFolsw" alt="Mountain View">
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <button class="glyphicon glyphicon-chevron-right btn-lg btn-info"></button>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </main>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <!-- Edit Entry Modal -->
+    <div class="modal fade" id="editEntry" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Seattle</h4>
+                </div>
+                <div class="modal-body">
+                    <table>
+                        <tr>
+                            <td>
+                                <img class="memory-pic" src="images/modal-pic.jpg" alt="location-pic" />
+                            </td>
+                            <td class="place-info">
+                                <form action="HomePage.html" method="POST">
+                                    <input class="field" type="text" placeholder="Name">
+                                    <br>
+                                    <input class="field" type="text" placeholder="Tags">
+                                    <br>
+                                    <input class="field" type="text" placeholder="Description">
+                                    <br>
+                                    <input class="field" type="number" placeholder="Rate Place From 1 to 10">
+                                    <br>
+                                    <select class="field" name="ordinal">
+                            <option value="" selected>Choose a City</option>
+                            <option value="los-angeles">Los Angeles</option>
+                            <option value="san-francisco">San Francisco</option>
+                            <option value="sacramento">Sacramento</option>
+                            <option value="san-diego">San Diego</option>
+                        </select>
+                                    <br>
+                                    <div class="field">
+                                        <label for="view-not-visited"> Not Visited</label>
+                                        <input type="radio" id="view-not-visited" name="visited" value="false" checked>
+                                        <br>
+                                        <label for="view-visited"> Visited</label>
+                                        <input type="radio" id="view-visited" name="visited" value="true">
+                                    </div>
+                                </form>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- END- Edit Entry Modal -->
+    
+    <!-- Add Entry Modal -->
+    <div class="modal fade" id="addEntry" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel1">Please Enter A City</h4>
+                </div>
+                <div class="modal-body">
+                    <table>
+                        <tr>
+                            <td>
+                                <img class="memory-pic" src="images/modal-pic.jpg" alt="location-pic" />
+                            </td>
+                            <td class="place-info">
+                                <form action="HomePage.html" method="POST">
+                                    <input class="field" type="text" placeholder="Name">
+                                    <br>
+                                    <input class="field" type="text" placeholder="Tags">
+                                    <br>
+                                    <input class="field" type="text" placeholder="Description">
+                                    <br>
+                                    <input class="field" type="number" placeholder="Rate Place From 1 to 10">
+                                    <br>
+                                    <select class="field" name="ordinal">
+                            <option value="" selected>Choose a City</option>
+                            <option value="los-angeles">Los Angeles</option>
+                            <option value="san-francisco">San Francisco</option>
+                            <option value="sacramento">Sacramento</option>
+                            <option value="san-diego">San Diego</option>
+                        </select>
+                                    <br>
+                                    <div class="field">
+                                        <label for="view-not-visited1"> Not Visited</label>
+                                        <input type="radio" id="view-not-visited1" name="visited" value="false" checked>
+                                        <br>
+                                        <label for="view-visited1"> Visited</label>
+                                        <input type="radio" id="view-visited1" name="visited" value="true">
+                                    </div>
+                                </form>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Add Memory</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- END- Add Entry Modal -->
+    
+    <!-- END- Modals -->
+    <script type="text/javascript" src="https://code.jquery.com/jquery.min.js"></script>
+    <script type="text/javascript" src="https://getbootstrap.com/dist/js/bootstrap.js"></script>
+</body>
+
+</html>

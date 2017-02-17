@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<!-- Log in Page -->
+<html>
+
+<head>
+    <title> Log in - Memento </title>
+    <style>
+        h1#title {
+            font-family: cursive;
+            font-style: italic;
+            text-align: center;
+            font-size: 80pt;
+            color: white;
+            margin-bottom: 40px;
+        }
+		body {
+			background: url(images/memento-background.jpeg) no-repeat center center fixed;
+			-webkit-background-size: cover;
+			-moz-background-size: cover;
+			-o-background-size: cover;
+			background-size: cover;
+		}
+        .opaque {
+            opacity: .7;
+        }
+		input#login-btn {
+			margin-bottom: 10px;
+		}
+    </style>
+    <link type="text/css" rel="stylesheet" href="https://getbootstrap.com/dist/css/bootstrap.css" />
+</head>
+
+<body>
+    <h1 id="title">Memento</h1>
+
+    <main class="container">
+        <div class="row justify-content-md-end text-center">
+            <div class="col-sm-4 col-sm-offset-4">
+                <form id="userinfo" action="HomePage.html" method="POST">
+                    <div class="form-group opaque">
+                        <input id="email" class="form-control" type="email" placeholder="Email Address">
+                    </div>
+
+                    <div class="form-group opaque">
+                        <input id="psw" class="form-control" type="password" placeholder="Password">
+                    </div>
+
+                    <input type="submit" id="login-btn" class="btn btn-default btn-block opaque" value="Login">
+                </form>
+                <form id="registration" action="RegisterPage.html" method="GET">
+                    <input type="submit" class="btn btn-default btn-block opaque" value="Create New Account">
+                </form>
+            </div>
+        </div>
+
+    </main>
+    <script type="text/javascript" src="https://code.jquery.com/jquery.min.js"></script>
+    <script type="text/javascript" src="https://getbootstrap.com/dist/js/bootstrap.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<!-- Register Page -->
+<html>
+<head>
+  <title> Register - Memento </title>
+  <style>
+    h1#title {
+        font-family: cursive;
+        font-style: italic;
+        text-align: center;
+        font-size: 80pt;
+        color: white;
+        margin-bottom: 40px;
+    }
+		
+    form {
+		text-align: center;
+	}
+	#register{
+        color:white;
+		text-align: center;
+    }
+    input.form-field {
+		margin-bottom:10px; 
+		padding-left: 5px; 
+		width: 350px;
+		height: 27px;
+	}
+	input.btn-field {
+		margin-bottom:10px; 
+		padding-left: 5px; 
+		width: 360px;
+		height: 27px;
+	}
+    div#memento{
+		text-align: center;
+		font-family: cursive; font-style: italic; font-size: 20pt;
+    }
+    a#back{
+		float: left;
+    }
+	body {
+		background: url(images/memento-background.jpeg) no-repeat center center fixed;
+		-webkit-background-size: cover;
+		-moz-background-size: cover;
+		-o-background-size: cover;
+		background-size: cover;
+	}
+	div#back-button{ 
+		border: 2px solid black;
+		border-radius: 3px;
+		padding: 5px;
+		padding-left: 10px;
+		padding-right: 10px;
+		margin-top: 4px;
+		margin-left: 10px;
+		color:black;
+    }
+	a:link{
+		text-decoration:none;
+    }
+	.opaque {
+        opacity: .70;
+    }
+    
+  </style>
+</head>
+
+<body>
+    <h1 id="title">Memento</h1>
+  
+    <main>
+		<header id="register">
+            <h2>Register</h2>
+        </header>
+        <form action="HomePage.html" method="POST">
+            <input class="form-field opaque" type="text" id="name" placeholder="Full Name"> 
+            <br>
+            <input class="form-field opaque" type="password" id="psw" placeholder="Password"> 
+            <br>
+            <input class="form-field opaque" type="email" id="email" placeholder="Email Address"> 
+            <br>
+            <input class="form-field opaque" type="tel" id="phone" placeholder="Phone Number"> 
+            <br>
+            <input class="btn-field opaque" type="submit" value="Register">
+			<br>
+        </form>
+		<form action="LogInPage.html" method="POST">
+			<input class="btn-field opaque" type="submit" value="Return to Login">
+		</form>
+    </main>
+</body>
+
+</html>
+
