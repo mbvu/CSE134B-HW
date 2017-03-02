@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<!-- Log in Page -->
+<html>
+
+<head>
+    <title> Log in - Memento </title>
+    <style>
+        h1#title {
+            font-family: cursive;
+            font-style: italic;
+            text-align: center;
+            font-size: 80pt;
+            color: white;
+            margin-bottom: 40px;
+        }
+        body {
+            background: url(images/memento-background.jpeg) no-repeat center center fixed;
+            -webkit-background-size: cover;
+            -moz-background-size: cover;
+            -o-background-size: cover;
+            background-size: cover;
+        }
+        .opaque {
+            opacity: .7;
+        }
+        button#login-btn, #registration-btn {
+            margin-bottom: 10px;
+        }
+    </style>
+    <link type="text/css" rel="stylesheet" href="https://getbootstrap.com/dist/css/bootstrap.css" />
+  <script src="https://www.gstatic.com/firebasejs/3.6.10/firebase.js"></script>
+  <script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyDsfuUcdBxzS-oGnzmLd3yHe6NTgLC05Ik",
+    authDomain: "cse134b-25420.firebaseapp.com",
+    databaseURL: "https://cse134b-25420.firebaseio.com",
+    storageBucket: "cse134b-25420.appspot.com",
+    messagingSenderId: "493557210071"
+  };
+  firebase.initializeApp(config);   
+  </script>
+  <script>
+    firebase.auth().onAuthStateChanged(function(user) {
+  if (user) {
+    location.href = "HomePage.html";
+  } else {
+  }
+});
+    
+    function signOut() {
+      firebase.auth().signOut().then(function() {
+  alert("Signing out...");
+}, function(error) {
+  alert("Could not sign out...");
+});
+    }
+
+    function googleSignIn(){
+      var provider = new firebase.auth.GoogleAuthProvider();
+      
+        firebase.auth().signInWithPopup(provider).then(function(result) {
+  // This gives you a Google Access Token. You can use it to access the Google API.
+  var token = result.credential.accessToken;
+  // The signed-in user info.
+  var user = result.user;
+  if (user){
+    location.href = "HomePage.html";
+  }
+  // ...
+}).catch(function(error) {
+  // Handle Errors here.
+  var errorCode = error.code;
+  var errorMessage = error.message;
+  // The email of the user's account used.
+  var email = error.email;
+  // The firebase.auth.AuthCredential type that was used.
+  var credential = error.credential;
+  // ...
+});
+  
+}
+    function emailSignIn(){
+      var email = document.getElementById("email").value;
+      var password = document.getElementById("psw").value;
+      firebase.auth().signInWithEmailAndPassword(email, password).then(
+        function(user){
+          location.href = "HomePage.html";
+        }, 
+        function(error){
+          alert(error.message);
+          document.getElementById("email").value = "";
+          document.getElementById("psw").value = "";
+        });
+    }
+
+      
+  </script>
+</head>
+
+<body>
+    <h1 id="title">Memento</h1>
+    <main class="container">
+        <div class="row justify-content-md-end text-center">
+            <div class="col-sm-4 col-sm-offset-4">
+                <form id="userinfo" action="HomePage.html" method="POST">
+                    <div class="form-group opaque">
+                        <input id="email" class="form-control" type="email" placeholder="Email Address">
+                    </div>
+
+                    <div class="form-group opaque">
+                        <input id="psw" class="form-control" type="password" placeholder="Password">
+                    </div>        
+                </form>
+              <button id="login-btn" class="btn btn-default btn-block opaque" onclick="emailSignIn()"> Login</button>
+                <form id="registration-btn" action="RegisterPage.html" method="GET">
+                    <input 
+                  type="submit" class="btn btn-default btn-block opaque" value="Create New Account">
+                </form>
+              <button id="google-btn" onclick="googleSignIn()" class="btn btn-default btn-block opaque">Login with Google</button>
+              <button onclick="signOut()"  class="btn btn-default btn-block opaque">Sign Out</button>
+            </div>
+        </div>
+
+    </main>
+    <script type="text/javascript" src="https://code.jquery.com/jquery.min.js"></script>
+    <script type="text/javascript" src="https://getbootstrap.com/dist/js/bootstrap.js"></script>
+</body>
+
+</html>
