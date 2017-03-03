@@ -1,117 +1,128 @@
 <!DOCTYPE html>
 <!-- Register Page -->
 <html>
+
 <head>
-  <title> Register - Memento </title>
-  <style>
-    h1#title {
-        font-family: cursive;
-        font-style: italic;
-        text-align: center;
-        font-size: 80pt;
-        color: white;
-        margin-bottom: 40px;
-    }
+    <title> Register - Memento </title>
+    <style>
+        h1#title {
+            font-family: cursive;
+            font-style: italic;
+            text-align: center;
+            font-size: 80pt;
+            color: white;
+            margin-bottom: 40px;
+        }
         
-    #input-container, form {
-        text-align: center;
-    }
-    #register {
-        color:white;
-        text-align: center;
-    }
-    input.form-field {
-        margin-bottom:10px; 
-        padding-left: 5px; 
-        width: 350px;
-        height: 27px;
-    }
-    .btn-field {
-        padding-left: 5px; 
-        margin-bottom:10px; 
-        width: 360px;
-        height: 27px;
-    }
-    div#memento{
-        text-align: center;
-        font-family: cursive; font-style: italic; font-size: 20pt;
-    }
-    a#back{
-        float: left;
-    }
-    body {
-        background: url(images/memento-background.jpeg) no-repeat center center fixed;
-        -webkit-background-size: cover;
-        -moz-background-size: cover;
-        -o-background-size: cover;
-        background-size: cover;
-    }
-    div#back-button{ 
-        border: 2px solid black;
-        border-radius: 3px;
-        padding: 5px;
-        padding-left: 10px;
-        padding-right: 10px;
-        margin-top: 4px;
-        margin-left: 10px;
-        color:black;
-    }
-    a:link{
-        text-decoration:none;
-    }
-    .opaque {
-        opacity: .70;
-    }
-    
-  </style>
-   <script src="https://www.gstatic.com/firebasejs/3.6.10/firebase.js"></script>
-  <script>
-  // Initialize Firebase
-  var config = {
-    apiKey: "AIzaSyDsfuUcdBxzS-oGnzmLd3yHe6NTgLC05Ik",
-    authDomain: "cse134b-25420.firebaseapp.com",
-    databaseURL: "https://cse134b-25420.firebaseio.com",
-    storageBucket: "cse134b-25420.appspot.com",
-    messagingSenderId: "493557210071"
-  };
-  firebase.initializeApp(config);   
-  </script>
-  <script>
-    firebase.auth().onAuthStateChanged(function(user) {
-      if (user) {
-        location.href = "HomePage.html";
-      } else {
-      }
-    });
-    
-    function register(){
-      var email = document.getElementById("email").value;
-      var password = document.getElementById("psw").value;
-      firebase.auth().createUserWithEmailAndPassword(email, password).then(function(user){
-        location.href="HomePage.html";
-      }, 
-        function(error){
-        //handle rror
-      alert(error.message);
-      document.getElementById("email").value = "";
-      document.getElementById("psw").value = "";
-    });
-      
-    }
-  </script>
+        #input-container,
+        form {
+            text-align: center;
+        }
+        
+        #register {
+            color: white;
+            text-align: center;
+        }
+        
+        input.form-field {
+            margin-bottom: 10px;
+            padding-left: 5px;
+            width: 350px;
+            height: 27px;
+        }
+        
+        .btn-field {
+            padding-left: 5px;
+            margin-bottom: 10px;
+            width: 360px;
+            height: 27px;
+        }
+        
+        div#memento {
+            text-align: center;
+            font-family: cursive;
+            font-style: italic;
+            font-size: 20pt;
+        }
+        
+        a#back {
+            float: left;
+        }
+        
+        body {
+            background: url(images/memento-background.jpeg) no-repeat center center fixed;
+            -webkit-background-size: cover;
+            -moz-background-size: cover;
+            -o-background-size: cover;
+            background-size: cover;
+        }
+        
+        div#back-button {
+            border: 2px solid black;
+            border-radius: 3px;
+            padding: 5px;
+            padding-left: 10px;
+            padding-right: 10px;
+            margin-top: 4px;
+            margin-left: 10px;
+            color: black;
+        }
+        
+        a:link {
+            text-decoration: none;
+        }
+        
+        .opaque {
+            opacity: .70;
+        }
+    </style>
+    <script src="https://www.gstatic.com/firebasejs/3.6.10/firebase.js"></script>
+    <script>
+        // Initialize Firebase
+        var config = {
+            apiKey: "AIzaSyDsfuUcdBxzS-oGnzmLd3yHe6NTgLC05Ik",
+            authDomain: "cse134b-25420.firebaseapp.com",
+            databaseURL: "https://cse134b-25420.firebaseio.com",
+            storageBucket: "cse134b-25420.appspot.com",
+            messagingSenderId: "493557210071"
+        };
+        firebase.initializeApp(config);
+    </script>
+    <script>
+        firebase.auth().onAuthStateChanged(function(user) {
+            if (user) {
+                location.href = "HomePage.html";
+            } else {}
+        });
+
+        function register() {
+            var email = document.getElementById("email").value;
+            var password = document.getElementById("psw").value;
+            firebase.auth().createUserWithEmailAndPassword(email, password).then(function(user) {
+                    location.href = "HomePage.html";
+                },
+                function(error) {
+                    //handle rror
+                    alert(error.message);
+                    document.getElementById("email").value = "";
+                    document.getElementById("psw").value = "";
+                });
+
+        }
+    </script>
 </head>
 
 <body>
     <h1 id="title">Memento</h1>
-  
+
     <main>
         <header id="register">
             <h2>Register</h2>
         </header>
         <div id="input-container">
-            <input class="form-field opaque" type="email" id="email" placeholder="Email Address"> 
+            <input class="form-field opaque" type="email" id="email" placeholder="Email Address">
             <br>
-            <input class="form-field opaque" type="password" id="psw" placeholder="Password"> 
+            <input class="form-field opaque" type="password" id="psw" placeholder="Password">
             <br>
             <button class="btn btn-field btn-field btn-block opaque" onclick="register()">Register</button>
         </div>
@@ -122,4 +133,3 @@
 </body>
 
 </html>
-
