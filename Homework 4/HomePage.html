@@ -139,10 +139,8 @@
 
         function signOut() {
             firebase.auth().signOut().then(function() {
-                alert("Signing out...");
                 location.href = "LogInPage.html";
             }, function(error) {
-                alert("Could not sign out...");
             });
         }
 
@@ -464,7 +462,7 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-info" onclick="readData()">Find</button>
                     <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="deleteData()">Delete</button>
-                    <button type="button" data-dismiss="modal" onclick="updateData()" class="btn btn-primary">Save changes</button>
+                    <button type="button" data-dismiss="modal" onclick="updateData()" class="btn btn-primary">Save Changes</button>
                 </div>
             </div>
         </div>
