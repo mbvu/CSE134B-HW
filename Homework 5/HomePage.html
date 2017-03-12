@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<!-- Future Trips Popup -->
+<html>
+
+<head>
+    <title> Homepage - Memento </title>
+    <link type="text/css" rel="stylesheet" href="https://getbootstrap.com/dist/css/bootstrap.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <style>
+        div#header-bar {
+            border-bottom: 1px solid gray;
+            background-color: #D3D3D3;
+            margin-bottom: 50px;
+            height: 40px;
+        }
+        
+        div#memento {
+            text-align: center;
+            font-family: cursive;
+            font-style: italic;
+            font-size: 20pt;
+        }
+        
+        a#home {
+            float: left;
+        }
+        
+        div#home-button {
+            margin-left: 5px;
+            margin-top: 2px;
+        }
+        
+        main {
+            border-left: thin solid black;
+            margin-left: -10px;
+            padding-left: 20px;
+        }
+        
+        .img-panel {
+            font-weight: bold;
+            font-style: italic;
+            font-size: 18pt;
+        }
+        
+        table.img-table td img {
+            margin: 10px;
+        }
+        
+        .side-button {
+            margin-bottom: 10px;
+        }
+        
+        .center-block {
+            display: table;
+            margin: auto;
+        }
+        
+        td.place-info {
+            padding-left: 30px;
+        }
+        
+        img.memory-pic {
+            width: 250px;
+            height: 250px;
+        }
+
+        img.memoriesPic {
+            width: 100px;
+            height: 100px;
+        }
+        td.memory-details{
+            padding-bottom: 10px;
+            padding-right: 4px;
+        }
+    </style>
+    <script src="https://www.gstatic.com/firebasejs/3.6.10/firebase.js"></script>
+    <script>
+        // Initialize Firebase
+        var config = {
+            apiKey: "AIzaSyDsfuUcdBxzS-oGnzmLd3yHe6NTgLC05Ik",
+            authDomain: "cse134b-25420.firebaseapp.com",
+            databaseURL: "https://cse134b-25420.firebaseio.com",
+            storageBucket: "cse134b-25420.appspot.com",
+            messagingSenderId: "493557210071"
+        };
+        firebase.initializeApp(config);
+    </script>
+    <script>
+        var currUser;
+        var radio = null;
+        var readName = null;
+        var currentIndex = null;
+        var myMemoriesPicNameArray = [];
+        var storageRef = firebase.storage().ref();
+
+        function loadPreviews() {
+            var currName = null;
+
+            firebase.database().ref('users/' + currUser.uid + '/myMemories').once('value').then(function(snapshot) {
+                snapshot.forEach(function(child) {
+                    currName = child.val().Name;
+                    myMemoriesPicNameArray.push(currName);           
+                });
+            }).then(function(){
+                myMemoriesPicNameArray.forEach(function(listItem, index){
+                    storageRef.child(currUser.uid + '/' + listItem).getDownloadURL().then(function(url) {
+                        var img = document.getElementById("myMemoriesPic" + (parseInt(index) + 1));
+                        img.src = url;
+                        img.setAttribute("data-name", listItem);
+                        img.setAttribute("data-toggle", "modal");
+                    }).catch(function(error) {
+                        console.log(error);
+                    });
+                });
+            });
+        }
+
+
+        function uploadFileAdd() {
+            var locName = document.getElementById('addName').value;
+            var file = document.getElementById('fileUploadAdd').files[0];
+            console.log("locname = " + locname);
+
+            if (file) {
+                console.log("running file()");
+                var uploadTask = storageRef.child(currUser.uid + '/' + locName).put(file);
+            }
+        }
+
+        function uploadFileEdit() {
+            var locName = document.getElementById('editName').value;
+            var file = document.getElementById('fileUploadEdit').files[0];
+
+            if (file) {
+                var uploadTask = storageRef.child(currUser.uid + '/' + locName).put(file);
+            }
+        }
+
+        function previewFileAdd() {
+            var preview = document.getElementById('uploadPictureAdd');
+            var file = document.getElementById('fileUploadAdd').files[0];
+            var reader = new FileReader();
+            reader.onloadend = function() {
+                preview.src = reader.result;
+            }
+
+            if (file) {
+                reader.readAsDataURL(file); //reads the data as a URL
+            } else {
+                preview.src = "";
+            }
+        }
+
+        function previewFileEdit() {
+            var preview = document.getElementById('uploadPictureEdit');
+            var file = document.getElementById('fileUploadEdit').files[0];
+            var reader = new FileReader();
+            reader.onloadend = function() {
+                preview.src = reader.result;
+            }
+
+            if (file) {
+                reader.readAsDataURL(file);
+            } else {
+                preview.src = "";
+            }
+        }
+
+        function signOut() {
+            firebase.auth().signOut().then(function() {
+                location.href = "LogInPage.html";
+            }, function(error) {
+            });
+        }
+
+        function getRadio(result) {
+            radio = result;
+        }
+
+        function readData() {
+            var name = document.getElementById("editName").value;
+            readName = name;
+            if (name == "") {
+                alert("Please enter a name for the memory you wish to search for");
+                return;
+            }
+            firebase.database().ref('/users/' + currUser.uid + '/' + name).once('value').then(function(snapshot) {
+                if (snapshot.val() == null) {
+                    alert("Cannot find this memory");
+                    return;
+                }
+                document.getElementById("editTags").value = snapshot.val().Tags;
+                document.getElementById("editDescription").value = snapshot.val().Description;
+                document.getElementById("editRating").value = snapshot.val().Rating;
+                document.getElementById("editCity").value = snapshot.val().City;
+
+                var visited = snapshot.val().Visited;
+                if (visited == 'true')
+                    document.getElementById("view-visited").checked = true;
+                else
+                    document.getElementById("view-not-visited").checked = true;
+            });
+
+            storageRef.child(currUser.uid + '/' + name).getDownloadURL().then(function(url) {
+                var img = document.getElementById("uploadPictureEdit");
+                img.src = url;
+            }).catch(function(error) {
+                //handle errors
+            });
+        }
+
+        function readMyMemories(id){
+            var name = document.getElementById(id).getAttribute('data-name');
+            readName = name;
+            firebase.database().ref('users/' + currUser.uid + '/myMemories' + "/" + name).once('value').then(function(snapshot) {
+                if (snapshot.val() == null) {
+                    alert("Cannot find this memory");
+                    return;
+                }
+                document.getElementById("editName").value = snapshot.val().Name;
+                document.getElementById("editTags").value = snapshot.val().Tags;
+                document.getElementById("editDescription").value = snapshot.val().Description;
+                document.getElementById("editRating").value = snapshot.val().Rating;
+                document.getElementById("editCity").value = snapshot.val().City;
+
+                var visited = snapshot.val().Visited;
+                if (visited == 'true')
+                    document.getElementById("view-visited").checked = true;
+                else
+                    document.getElementById("view-not-visited").checked = true;
+            });
+
+            storageRef.child(currUser.uid + '/' + name).getDownloadURL().then(function(url) {
+                var img = document.getElementById("uploadPictureEdit");
+                img.src = url;
+            }).catch(function(error) {
+                //handle errors
+            });
+        }
+
+        function populateFutureMemories() {
+            firebase.database().ref('users/' + currUser.uid + '/futureMemories').once('value').then(function(snapshot) {
+                if (snapshot.val() == null) {
+                    console.log("populating future memories");
+                    $.getJSON( "futureMemories.json", function( data ) {
+                        $.each( data, function( name, city ) {
+                            firebase.database().ref('users/' + currUser.uid + '/futureMemories' + "/" + name).set({
+                                City: city,
+                                Move: false
+                            });
+                        });
+                    });
+                }
+            });
+        }
+
+        function addData() {
+            var name = document.getElementById("addName").value;
+            var tags = document.getElementById("addTags").value;
+            var description = document.getElementById("addDescription").value;
+            var rating = document.getElementById("addRating").value;
+            var city = document.getElementById("addCity").value;
+            if (name == "" || description == "" || rating == "" || city == "" || radio == null) {
+                alert("Please enter the fields for this memory");
+                return;
+            }
+            firebase.database().ref('users/' + currUser.uid + '/myMemories' + "/" + name).set({
+                Name: name,
+                Tags: tags,
+                Description: description,
+                Rating: rating,
+                City: city,
+                Visited: radio
+            });
+            uploadFileAdd();
+
+            clearAddFields();
+            location.reload();
+        }
+
+        function updateMyMemories() {
+            var name = document.getElementById("editName").value;
+            if (name != readName) {
+                alert("Please check that the name of the memory is valid before updating");
+                return;
+            }
+
+            var tags = document.getElementById("editTags").value;
+            var description = document.getElementById("editDescription").value;
+            var rating = document.getElementById("editRating").value;
+            var city = document.getElementById("editCity").value;
+
+            firebase.database().ref('users/' + currUser.uid + '/myMemories' + "/" + name).set({
+                Name: name,
+                Tags: tags,
+                Description: description,
+                Rating: rating,
+                City: city,
+                Visited: radio
+            });
+            uploadFileEdit();
+
+            clearEditFields();
+
+        }
+
+        function deleteMyMemories() {
+            var name = document.getElementById("editName").value;
+            if (name == "") {
+                alert("Please enter a name for the memory you wish to delete");
+                return;
+            }
+            firebase.database().ref('users/' + currUser.uid + '/myMemories' + "/" + name).remove();
+            storageRef.child(currUser.uid + '/' + name).delete().then(function() {
+                // File deleted successfully
+            }).catch(function(error) {
+                // Uh-oh, an error occurred!
+            });
+            clearEditFields();
+            location.reload();
+        }
+
+        function clearEditFields() {
+            document.getElementById("editName").value = "";
+            document.getElementById("editTags").value = "";
+            document.getElementById("editDescription").value = "";
+            document.getElementById("editRating").value = "";
+            document.getElementById("editCity").value = "";
+            document.getElementById("view-visited").checked = false;
+            document.getElementById("view-not-visited").checked = false;
+            document.getElementById('fileUploadEdit').value = "";
+            var preview = document.getElementById('uploadPictureEdit');
+            preview.src = "https://suplugins.com/podium/images/placeholder-03.png";
+        }
+
+        function clearAddFields() {
+            document.getElementById("addName").value = "";
+            document.getElementById("addTags").value = "";
+            document.getElementById("addDescription").value = "";
+            document.getElementById("addRating").value = "";
+            document.getElementById("addCity").value = "";
+            document.getElementById("view-visited1").checked = false;
+            document.getElementById("view-not-visited1").checked = false;
+            document.getElementById('fileUploadAdd').value = "";
+            var preview = document.getElementById('uploadPictureAdd');
+            preview.src = "https://suplugins.com/podium/images/placeholder-03.png";
+        }
+
+    </script>
+</head>
+
+<body>
+    <header>
+        <div id="header-bar">
+            <a id="home" href="HomePage.html">
+                <div class="btn btn-primary btn-block" id="home-button">Home</div>
+            </a>
+            <div id="memento">Memento</div>
+        </div>
+    </header>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-3">
+                <nav>
+                    <div class="btn btn-primary btn-block side-button" id="make-memories-btn" data-toggle="modal" data-target="#addEntry">
+                        Make Memories
+                    </div>
+
+                    <a href="ProfilePage.html">
+                        <div class="btn btn-primary btn-block side-button">My Profile</div>
+                    </a>
+                    <button onclick="signOut()" class="btn btn-primary btn-block side-button">Logout</button>
+                </nav>
+            </div>
+            <div class="col-sm-9">
+                <main>
+                    <div class="panel panel-info">
+                        <div class="panel-heading text-center img-panel">My Memories</div>
+                        <div class="panel-body center-block">
+                            <table>
+                                <tr>
+                                    <td>
+                                        <button class="glyphicon glyphicon-chevron-left btn-lg btn-info"></button>
+                                    </td>
+                                    <td class="img-panel">
+                                        <table class="img-table">
+                                            <tr>
+                                                <td>
+                                                    <img id="myMemoriesPic1" class="img-responsive memoriesPic" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="Images could not load, please retry again" data-target="#editEntry" onclick="readMyMemories(this.id)" data-name="">
+                                                </td>
+                                                <td>
+                                                    <img id="myMemoriesPic2" class="img-responsive memoriesPic" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="Images could not load, please retry again" data-target="#editEntry" onclick="readMyMemories(this.id)" data-name="">
+                                                </td>
+                                                <td>
+                                                    <img id="myMemoriesPic3" class="img-responsive memoriesPic" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="Images could not load, please retry again" data-target="#editEntry" onclick="readMyMemories(this.id)" data-name="">
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <img id="myMemoriesPic4" class="img-responsive memoriesPic" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="Images could not load, please retry again" data-target="#editEntry" onclick="readMyMemories(this.id)" data-name="">
+                                                </td>
+                                                <td>
+                                                    <img id="myMemoriesPic5" class="img-responsive memoriesPic" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="Images could not load, please retry again" data-target="#editEntry" onclick="readMyMemories(this.id)" data-name="">
+                                                </td>
+                                                <td>
+                                                    <img id="myMemoriesPic6" class="img-responsive memoriesPic" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="Images could not load, please retry again" data-target="#editEntry" onclick="readMyMemories(this.id)" data-name="">
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <img id="myMemoriesPic7" class="img-responsive memoriesPic" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="Images could not load, please retry again" data-target="#editEntry" onclick="readMyMemories(this.id)"  data-name="">
+                                                </td>
+                                                <td>
+                                                    <img id="myMemoriesPic8" class="img-responsive memoriesPic" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="Images could not load, please retry again" data-target="#editEntry" onclick="readMyMemories(this.id)" data-name="">
+                                                </td>
+                                                <td>
+                                                    <img id="myMemoriesPic9" class="img-responsive memoriesPic" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="Images could not load, please retry again" data-target="#editEntry" onclick="readMyMemories(this.id)" data-name="">
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <button class="glyphicon glyphicon-chevron-right btn-lg btn-info"></button>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="panel panel-info">
+                        <div class="panel-heading text-center img-panel">Future Memories</div>
+                        <div class="panel-body center-block">
+                            <table>
+                                <tr>
+                                    <td>
+                                        <button class="glyphicon glyphicon-chevron-left btn-lg btn-info btn-block"></button>
+                                    </td>
+                                    <td>
+                                        <table class="img-table">
+                                            <tr>
+                                                <td>
+                                                    <img class="img-responsive" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="Images could not load, please retry again">
+                                                </td>
+                                                <td>
+                                                    <img class="img-responsive" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="Images could not load, please retry again">
+                                                </td>
+                                                <td>
+                                                    <img class="img-responsive" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="Images could not load, please retry again">
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <img class="img-responsive" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="Images could not load, please retry again">
+                                                </td>
+                                                <td>
+                                                    <img class="img-responsive" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="Images could not load, please retry again">
+                                                </td>
+                                                <td>
+                                                    <img class="img-responsive" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="Images could not load, please retry again">
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <img class="img-responsive" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="Images could not load, please retry again">
+                                                </td>
+                                                <td>
+                                                    <img class="img-responsive" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="Images could not load, please retry again">
+                                                </td>
+                                                <td>
+                                                    <img class="img-responsive" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="Images could not load, please retry again">
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <button class="glyphicon glyphicon-chevron-right btn-lg btn-info"></button>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </main>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <!-- Edit Entry Modal -->
+    <div class="modal fade" id="editEntry" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" onclick="clearEditFields()" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Seattle</h4>
+                </div>
+                <div class="modal-body">
+                    <table>
+                        <tr>
+                            <td>
+                                <img class="memory-pic" src="https://suplugins.com/podium/images/placeholder-03.png" alt="location-pic" id="uploadPictureEdit" />
+                                <br> Upload New Picture:
+                                <input type="file" onchange="previewFileEdit()" id="fileUploadEdit">
+                            </td>
+                            <td class="place-info">
+                                <div class="input-container">
+                                    <table>
+                                        <tr>
+                                            <td class="memory-details">Name</td>
+                                            <td class="memory-details"><input id="editName" class="field" type="text"></td>
+                                        </tr>
+                                        <br>
+                                      <tr>
+                                            <td class="memory-details">Tags</td>
+                                            <td class="memory-details"><input id="editTags" class="field" type="text"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="memory-details">Description</td>
+                                            <td class="memory-details"><input id="editDescription" class="field" type="text" ></td>
+                                        </tr>
+                                        <br>
+                                        <tr>
+                                            <td class="memory-details">Rating (1-10) </td>
+                                            <td class="memory-details"><input id="editRating" class="field" type="number" max="10" ></td>
+                                        </tr>
+                                    </table>
+                                    <br>
+                                    <select id="editCity" class="field" name="ordinal">
+                                        <option value="" selected disabled>Choose a City</option>
+                                        <option value="los-angeles">Los Angeles</option>
+                                        <option value="san-francisco">San Francisco</option>
+                                        <option value="sacramento">Sacramento</option>
+                                        <option value="san-diego">San Diego</option>
+                                    </select>
+                                    <br>
+                                    <div class="field">
+                                        <label for="view-not-visited"> Not Visited</label>
+                                        <input type="radio" id="view-not-visited" name="visited" value="false" onclick="getRadio(this.value)">
+                                        <br>
+                                        <label for="view-visited"> Visited</label>
+                                        <input type="radio" id="view-visited" name="visited" value="true" onclick="getRadio(this.value)">
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-info" onclick="readData()">Find</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="deleteMyMemories()">Delete</button>
+                    <button type="button" data-dismiss="modal" onclick="updateMyMemories()" class="btn btn-primary">Save Changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- END- Edit Entry Modal -->
+
+    <!-- Add Entry Modal -->
+    <div class="modal fade" id="addEntry" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" onclick="clearAddFields()" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel1">Please Enter A City</h4>
+                </div>
+                <div class="modal-body">
+                    <table>
+                        <tr>
+                            <td>
+                                <img class="memory-pic" src="https://suplugins.com/podium/images/placeholder-03.png" alt="location-pic" id="uploadPictureAdd" />
+                                <input type="file" id="fileUploadAdd" onchange="previewFileAdd()"> </td>
+                            <td class="place-info">
+                                <div class="input-container">
+                                    <table>
+                                        <tr>
+                                            <td class="memory-details">Name</td>
+                                            <td class="memory-details"><input id="addName" class="field" type="text"></td>
+                                        </tr>
+                                      <tr>
+                                            <td class="memory-details">Tags</td>
+                                            <td class="memory-details"><input id="addTags" class="field" type="text" ></td>
+                                        </tr>
+                                        <br>
+                                        <tr>
+                                            <td class="memory-details">Description</td>
+                                            <td class="memory-details"><input id="addDescription" class="field" type="text" ></td>
+                                        </tr>
+                                        <br>
+                                        <tr>
+                                            <td class="memory-details">Rating (1-10) </td>
+                                            <td class="memory-details"><input id="addRating" class="field" type="number" max="10" ></td>
+                                        </tr>
+                                    </table>
+                                    <br>
+                                    <select id="addCity" class="field" name="ordinal">
+                                        <option value="" selected disabled>Choose a City</option>
+                                        <option value="los-angeles">Los Angeles</option>
+                                        <option value="san-francisco">San Francisco</option>
+                                        <option value="sacramento">Sacramento</option>
+                                        <option value="san-diego">San Diego</option>
+                                    </select>
+                                    <br>
+                                    <div class="field">
+                                        <label for="view-not-visited1"> Not Visited</label>
+                                        <input type="radio" id="view-not-visited1" name="visited" value="false" onclick="getRadio(this.value)">
+                                        <br>
+                                        <label for="view-visited1"> Visited</label>
+                                        <input type="radio" id="view-visited1" name="visited" value="true" onclick="getRadio(this.value)">
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" onclick="addData()" data-dismiss="modal" class="btn btn-primary">Add Memory</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- END- Add Entry Modal -->
+
+  
+    <!-- Future Entry Modal -->
+    <div class="modal fade" id="futureEntry" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" onclick="clearAddFields()" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel1">Please Enter A City</h4>
+                </div>
+                <div class="modal-body">
+                    <table>
+                        <tr>
+                            <td>
+                                <img class="memory-pic" src="https://suplugins.com/podium/images/placeholder-03.png" alt="location-pic" id="uploadPictureAdd" />
+                                <input type="file" id="fileUploadAdd" onchange="previewFileAdd()"> </td>
+                            <td class="place-info">
+                                <div class="input-container">
+                                    <table>
+                                        <tr>
+                                            <td class="memory-details">Name</td>
+                                            <td class="memory-details"><input id="addName" class="field" type="text"></td>
+                                        </tr>
+                                    </table>
+                                    <br>
+                                    <select id="addCity" class="field" name="ordinal">
+                                        <option value="" selected disabled>Choose a City</option>
+                                        <option value="los-angeles">Los Angeles</option>
+                                        <option value="san-francisco">San Francisco</option>
+                                        <option value="sacramento">Sacramento</option>
+                                        <option value="san-diego">San Diego</option>
+                                    </select>
+                                    <br>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" onclick="NEEDTOCHAGNGEaddData()" data-dismiss="modal" class="btn btn-primary">Visited</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- END- Future Entry Modal -->
+
+    <!-- END- Modals -->
+    <script type="text/javascript" src="https://code.jquery.com/jquery.min.js"></script>
+    <script type="text/javascript" src="https://getbootstrap.com/dist/js/bootstrap.js"></script>
+    <script>
+        firebase.auth().onAuthStateChanged(function(user) {
+            if (user) {
+                currUser = user;
+                populateFutureMemories();
+                loadPreviews();
+            } else {
+                location.href = "LogInPage.html";
+            }
+        });    
+    </script>
+</body>
+
+</html>
