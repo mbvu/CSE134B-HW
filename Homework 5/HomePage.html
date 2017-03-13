@@ -91,21 +91,46 @@
         var readName = null;
         var currFutureMemory = null;
         var currentIndex = null;
-        var myMemoriesPicNameArray = [];
+        var currKey = null;
+        var myMemoriesPathArray = [];
+        var myMemoriesKeyArray = [];
         var futureMemoriesPicNameArray = [];
         var myMemoriesCount = 0;
+        var myMemoriesBoundary = 0;
         var futureMemoriesCount = 0;
+        var futureMemoriesBoundary = 0;
         var storageRef = firebase.storage().ref();
 
         function loadMyMemoriesPreview() {
             var currName = null;
-
+            myMemoriesBoundary = myMemoriesCount + 9;
             firebase.database().ref('users/' + currUser.uid + '/myMemories').once('value').then(function(snapshot) {
                 snapshot.forEach(function(child) {
                     currName = child.val().Name;
-                    myMemoriesPicNameArray.push(currName);          
+                    myMemoriesKeyArray.push(child.key);
+                    myMemoriesPathArray.push(child.val().Path);          
                 });
             }).then(function(){
+                console.log(myMemoriesKeyArray.toString());
+                if (myMemoriesKeyArray.length < myMemoriesBoundary) {
+                    myMemoriesBoundary = myMemoriesKeyArray.length;
+                }
+                for (var i = myMemoriesCount; i < myMemoriesBoundary; i++) {
+                    (function(counter) {
+                        storageRef.child(myMemoriesPathArray[counter]).getDownloadURL().then(function(url) {
+                            var img = document.getElementById("myMemoriesPic" + (parseInt(counter) + 1));
+                            img.src = url;
+                            //img.setAttribute("data-name", myMemoriesPicNameArray[counter]);
+                            img.setAttribute("data-toggle", "modal");
+                            img.setAttribute("data-key", myMemoriesKeyArray[counter]);
+                        }).catch(function(error) {
+                            console.log(error);
+                        });
+                    })(i);
+                }
+                myMemoriesCount = myMemoriesCount + myMemoriesBoundary;
+
+                /*
                 myMemoriesPicNameArray.forEach(function(name, index){
                     storageRef.child(currUser.uid + '/' + name).getDownloadURL().then(function(url) {
                         var img = document.getElementById("myMemoriesPic" + (parseInt(index) + 1));
@@ -116,13 +141,14 @@
                         console.log(error);
                     });
                 });
+                */
             });
         }
 
         function loadFutureMemoriesPreview() {
             var isMoved = null;
             var currName = null
-            futureMemoriesCount = 0;
+            futureMemoriesBoundary = futureMemoriesCount + 9;
 
             firebase.database().ref('users/' + currUser.uid + '/futureMemories').once('value').then(function(snapshot) {
                 snapshot.forEach(function(child) {
@@ -133,24 +159,46 @@
                     }                           
                 });
             }).then(function(){
+                console.log(futureMemoriesPicNameArray.toString());
+                if (futureMemoriesPicNameArray.length < futureMemoriesBoundary) {
+                    futureMemoriesBoundary = futureMemoriesPicNameArray.length;
+                }
+                for (var i = futureMemoriesCount; i < futureMemoriesBoundary; i++) {
+                    (function(counter) {
+                        storageRef.child(futureMemoriesPicNameArray[counter] + '.jpg').getDownloadURL().then(function(url) {
+                            var img = document.getElementById("futureMemoriesPic" + (parseInt(counter) + 1));
+                            img.src = url;
+                            img.setAttribute("data-name", futureMemoriesPicNameArray[counter]);
+                            img.setAttribute("data-toggle", "modal");
+                            counter.count++;
+                        }).catch(function(error) {
+                            console.log(error);
+                        });
+                    })(i);
+                }
+                futureMemoriesCount = futureMemoriesCount + futureMemoriesBoundary;
+
+                /*
                 futureMemoriesPicNameArray.forEach(function(name, index){
-                    console.log("before = " + futureMemoriesCount);
+                    console.log("before = " + counter.count);
                     storageRef.child(name + '.jpg').getDownloadURL().then(function(url) {
-                        if (futureMemoriesCount < 9) {
+                        if (counter.count < boundary) {
                             var img = document.getElementById("futureMemoriesPic" + (parseInt(index) + 1));
                             img.src = url;
                             img.setAttribute("data-name", name);
                             img.setAttribute("data-toggle", "modal");
-                            futureMemoriesCount++;
-                            console.log(futureMemoriesCount);
+                            counter.count++;
+                            console.log("futurecount = " + counter.count);
+                            console.log("boundary = " + boundary);
                         }
-                    
                     }).catch(function(error) {
                         console.log(error);
                     });
                 });
+                */                
             });
         }
+
 
                 
         function populateFutureMemories() {
@@ -167,7 +215,9 @@
                     }); 
                 }
             }).then(function() {
-                loadFutureMemoriesPreview();
+                setTimeout(function(){
+                    loadFutureMemoriesPreview();
+                }, 100);
             });
         } 
 
@@ -177,30 +227,34 @@
                     currUser = user;
                     populateFutureMemories();
                     loadMyMemoriesPreview();
-                    //loadFutureMemoriesPreview();
                 } else {
                     location.href = "LogInPage.html";
                 }
             });  
         }  
         
-        function uploadFileAdd() {
+        function uploadFileAdd(key) {
             var locName = document.getElementById('addName').value;
             var file = document.getElementById('fileUploadAdd').files[0];
             if (file) {
-                storageRef.child(currUser.uid + '/' + locName).put(file).then(function(){
-                    location.reload();
+                storageRef.child(currUser.uid + '/' + key).put(file).then(function(){
+                    refreshMyMemories();
                 });
             }        
         }
 
-        function uploadFileEdit() {
+        function uploadFileEdit(key) {
             var locName = document.getElementById('editName').value;
             var file = document.getElementById('fileUploadEdit').files[0];
 
             if (file) {
-                storageRef.child(currUser.uid + '/' + locName).put(file);
+                storageRef.child(currUser.uid + '/' + key).put(file).then(function(){
+                    refreshMyMemories();
+                });
+                return true;
             }
+            else
+                return false;
         }
 
         function previewFileAdd() {
@@ -244,62 +298,54 @@
             radio = result;
         }
         
-        function readData() {
-            var name = document.getElementById("editName").value;
-            readName = name;
-            if (name == "") {
-                alert("Please enter a name for the memory you wish to search for");
-                return;
-            }
-            firebase.database().ref('/users/' + currUser.uid + '/' + name).once('value').then(function(snapshot) {
-                if (snapshot.val() == null) {
-                    alert("Cannot find this memory");
-                    return;
-                }
-                document.getElementById("editTags").value = snapshot.val().Tags;
-                document.getElementById("editDescription").value = snapshot.val().Description;
-                document.getElementById("editRating").value = snapshot.val().Rating;
-                document.getElementById("editCity").value = snapshot.val().City;
-
-                var visited = snapshot.val().Visited;
-                if (visited == 'true')
-                    document.getElementById("view-visited").checked = true;
-                else
-                    document.getElementById("view-not-visited").checked = true;
-            });
-
-            storageRef.child(currUser.uid + '/' + name).getDownloadURL().then(function(url) {
-                var img = document.getElementById("uploadPictureEdit");
-                img.src = url;
-            }).catch(function(error) {
-                //handle errors
-            });
-        } 
-
-        function readMyMemories(id){
-            var name = document.getElementById(id).getAttribute('data-name');
-            readName = name;
-            if (name == "")
-                return;
-            firebase.database().ref('users/' + currUser.uid + '/myMemories' + "/" + name).once('value').then(function(snapshot) {
+        function readData(key) {
+            firebase.database().ref('/users/' + currUser.uid + '/myMemories/' + key).once('value').then(function(snapshot) {
                 document.getElementById("editName").value = snapshot.val().Name;
                 document.getElementById("editTags").value = snapshot.val().Tags;
                 document.getElementById("editDescription").value = snapshot.val().Description;
                 document.getElementById("editRating").value = snapshot.val().Rating;
                 document.getElementById("editCity").value = snapshot.val().City;
+                readName = snapshot.val().Name; 
 
                 var visited = snapshot.val().Visited;
                 if (visited == 'true')
                     document.getElementById("view-visited").checked = true;
                 else
                     document.getElementById("view-not-visited").checked = true;
-            });
 
-            storageRef.child(currUser.uid + '/' + name).getDownloadURL().then(function(url) {
-                var img = document.getElementById("uploadPictureEdit");
-                img.src = url;
-            }).catch(function(error) {
-                //handle errors
+                storageRef.child(snapshot.val().Path).getDownloadURL().then(function(url) {
+                    var img = document.getElementById("uploadPictureEdit");
+                    img.src = url;
+                }).catch(function(error) {
+                    //handle errors
+                });
+            });
+        } 
+
+        function readMyMemories(id){
+            var key = document.getElementById(id).getAttribute('data-key');
+            currKey = key;
+            if (key == "")
+                return;
+            firebase.database().ref('users/' + currUser.uid + '/myMemories' + "/" + key).once('value').then(function(snapshot) {
+                document.getElementById("editName").value = snapshot.val().Name;
+                document.getElementById("editTags").value = snapshot.val().Tags;
+                document.getElementById("editDescription").value = snapshot.val().Description;
+                document.getElementById("editRating").value = snapshot.val().Rating;
+                document.getElementById("editCity").value = snapshot.val().City;
+                readName = snapshot.val().Name;
+                var visited = snapshot.val().Visited;
+                if (visited == 'true')
+                    document.getElementById("view-visited").checked = true;
+                else
+                    document.getElementById("view-not-visited").checked = true;
+
+                storageRef.child(snapshot.val().Path).getDownloadURL().then(function(url) {
+                    var img = document.getElementById("uploadPictureEdit");
+                    img.src = url;
+                }).catch(function(error) {
+                    //handle errors
+                });
             });
         }
 
@@ -327,11 +373,13 @@
             var description = document.getElementById("addDescription").value;
             var rating = document.getElementById("addRating").value;
             var city = document.getElementById("addCity").value;
+            var path = "";
             if (name == "" || description == "" || rating == "" || city == "" || radio == null) {
                 alert("Please enter the fields for this memory");
                 return;
             }
-            firebase.database().ref('users/' + currUser.uid + '/myMemories/' + name).set({
+
+            var addRef = firebase.database().ref('users/' + currUser.uid + '/myMemories').push({
                 Name: name,
                 Tags: tags,
                 Description: description,
@@ -339,47 +387,80 @@
                 City: city,
                 Visited: radio
             });
-            uploadFileAdd();
+
+            var key = addRef.key;
+            path = currUser.uid + "/" + key;
+
+            addRef.set({
+                Name: name,
+                Tags: tags,
+                Description: description,
+                Rating: rating,
+                City: city,
+                Visited: radio,
+                Path: path,
+            });
+
+            uploadFileAdd(key);
             clearAddFields();
         }
-        
+
         function updateMyMemories() {
             var name = document.getElementById("editName").value;
             if (name != readName) {
                 alert("Please check that the name of the memory is valid before updating");
                 return;
             }
-
+            var path;
             var tags = document.getElementById("editTags").value;
             var description = document.getElementById("editDescription").value;
             var rating = document.getElementById("editRating").value;
             var city = document.getElementById("editCity").value;
+            var updated = uploadFileEdit(currKey);
+            if (description == "" || rating == "" || city == ""){
+                alert("Please enter the fields for this memory");
+                return;
+            }
 
-            firebase.database().ref('users/' + currUser.uid + '/myMemories' + "/" + name).set({
-                Name: name,
-                Tags: tags,
-                Description: description,
-                Rating: rating,
-                City: city,
-                Visited: radio
+            firebase.database().ref('users/' + currUser.uid + '/myMemories' + "/" + currKey).once('value').then(function(snapshot) {
+                if (updated)
+                    path = currUser.uid + "/" + currKey;
+                else
+                    path = snapshot.val().Path;
+
+                firebase.database().ref('users/' + currUser.uid + '/myMemories' + "/" + currKey).set({
+                    Name: name,
+                    Tags: tags,
+                    Description: description,
+                    Rating: rating,
+                    City: city,
+                    Visited: radio,
+                    Path: path,
+                });
+
             });
-            uploadFileEdit();
-
             clearEditFields();
         }
     
         function deleteMyMemories() {
-            var name = document.getElementById("editName").value;
-            if (name == "") {
-                alert("Please enter a name for the memory you wish to delete");
-                return;
-            }
-            firebase.database().ref('users/' + currUser.uid + '/myMemories' + "/" + name).remove();
-            storageRef.child(currUser.uid + '/' + name).delete().then(function() {
-                location.reload();
-            }).catch(function(error) {
-                // Uh-oh, an error occurred!
+            firebase.database().ref('users/' + currUser.uid + '/myMemories' + "/" + currKey).once('value').then(function(snapshot) {
+                if (snapshot.val().Path != (snapshot.val().Name + '.jpg')){
+                    storageRef.child(snapshot.val().Path).delete().then(function() {
+                        firebase.database().ref('users/' + currUser.uid + '/myMemories' + "/" + currKey).remove().then(function(){
+                            refreshMyMemories();
+                        });
+                    }).catch(function(error) {
+                        // Uh-oh, an error occurred!
+                    });
+                }
+                else{
+                    firebase.database().ref('users/' + currUser.uid + '/myMemories' + "/" + currKey).remove().then(function(){
+                        refreshMyMemories();
+                    });
+                }
             });
+            myMemoriesCount--;
+
             clearEditFields();
         }
 
@@ -391,15 +472,25 @@
                 City: city,
                 Move: true
             });
-            firebase.database().ref('users/' + currUser.uid + '/myMemories' + "/" + name).set({
+            var path = name + '.jpg';
+            var addRef = firebase.database().ref('users/' + currUser.uid + '/myMemories').push({
                 Name: name,
                 City: city,
-                Visited: "true"
+                Description: "",
+                Tags: "",
+                Visited: "true",
+                Path: path,
             });
+            var key = addRef.key;
+            currKey = key;
+
             document.getElementById(currFutureMemory).setAttribute('data-name', '');
             document.getElementById(currFutureMemory).removeAttribute('data-toggle');
             document.getElementById(currFutureMemory).src = "data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=";
             $('#editEntry').modal('show');
+            readData(key);
+            refreshMyMemories();
+            refreshFutureMemories();
         }
     
         function clearEditFields() {
@@ -427,6 +518,33 @@
             var preview = document.getElementById('uploadPictureAdd');
             preview.src = "https://suplugins.com/podium/images/placeholder-03.png";
         } 
+
+        function refreshMyMemories(){
+            for (var i = 1; i <= 9; i++){
+                var id = "myMemoriesPic" + i;
+                var img = document.getElementById(id);
+                img.setAttribute("data-key", "");
+                img.removeAttribute("data-toggle");
+                img.src = "data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=";
+            }
+            myMemoriesCount = 0;
+            myMemoriesKeyArray = [];
+            myMemoriesPathArray = [];
+            loadMyMemoriesPreview();
+        }
+
+        function refreshFutureMemories(){
+            for (var i = 1; i <= 9; i++){
+                var id = "futureMemoriesPic" + i;
+                var img = document.getElementById(id);
+                img.setAttribute("data-name", "");
+                img.removeAttribute("data-toggle");
+                img.src = "data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=";
+            }
+            futureMemoriesCount = 0;
+            futureMemoriesPicNameArray = [];
+            loadFutureMemoriesPreview();
+        }
     </script>
 </head>
 
@@ -468,35 +586,35 @@
                                         <table class="img-table">
                                             <tr>
                                                 <td>
-                                                    <img id="myMemoriesPic1" class="img-responsive memoriesPic" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="Images could not load, please retry again" data-target="#editEntry" onclick="readMyMemories(this.id)" data-name="">
+                                                    <img id="myMemoriesPic1" class="img-responsive memoriesPic" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="Images could not load, please retry again" data-target="#editEntry" onclick="readMyMemories(this.id)" data-key="">
                                                 </td>
                                                 <td>
-                                                    <img id="myMemoriesPic2" class="img-responsive memoriesPic" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="Images could not load, please retry again" data-target="#editEntry" onclick="readMyMemories(this.id)" data-name="">
+                                                    <img id="myMemoriesPic2" class="img-responsive memoriesPic" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="Images could not load, please retry again" data-target="#editEntry" onclick="readMyMemories(this.id)" data-key="">
                                                 </td>
                                                 <td>
-                                                    <img id="myMemoriesPic3" class="img-responsive memoriesPic" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="Images could not load, please retry again" data-target="#editEntry" onclick="readMyMemories(this.id)" data-name="">
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <img id="myMemoriesPic4" class="img-responsive memoriesPic" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="Images could not load, please retry again" data-target="#editEntry" onclick="readMyMemories(this.id)" data-name="">
-                                                </td>
-                                                <td>
-                                                    <img id="myMemoriesPic5" class="img-responsive memoriesPic" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="Images could not load, please retry again" data-target="#editEntry" onclick="readMyMemories(this.id)" data-name="">
-                                                </td>
-                                                <td>
-                                                    <img id="myMemoriesPic6" class="img-responsive memoriesPic" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="Images could not load, please retry again" data-target="#editEntry" onclick="readMyMemories(this.id)" data-name="">
+                                                    <img id="myMemoriesPic3" class="img-responsive memoriesPic" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="Images could not load, please retry again" data-target="#editEntry" onclick="readMyMemories(this.id)" data-key="">
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <td>
-                                                    <img id="myMemoriesPic7" class="img-responsive memoriesPic" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="Images could not load, please retry again" data-target="#editEntry" onclick="readMyMemories(this.id)"  data-name="">
+                                                    <img id="myMemoriesPic4" class="img-responsive memoriesPic" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="Images could not load, please retry again" data-target="#editEntry" onclick="readMyMemories(this.id)" data-key="">
                                                 </td>
                                                 <td>
-                                                    <img id="myMemoriesPic8" class="img-responsive memoriesPic" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="Images could not load, please retry again" data-target="#editEntry" onclick="readMyMemories(this.id)" data-name="">
+                                                    <img id="myMemoriesPic5" class="img-responsive memoriesPic" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="Images could not load, please retry again" data-target="#editEntry" onclick="readMyMemories(this.id)" data-key="">
                                                 </td>
                                                 <td>
-                                                    <img id="myMemoriesPic9" class="img-responsive memoriesPic" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="Images could not load, please retry again" data-target="#editEntry" onclick="readMyMemories(this.id)" data-name="">
+                                                    <img id="myMemoriesPic6" class="img-responsive memoriesPic" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="Images could not load, please retry again" data-target="#editEntry" onclick="readMyMemories(this.id)" data-key="">
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <img id="myMemoriesPic7" class="img-responsive memoriesPic" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="Images could not load, please retry again" data-target="#editEntry" onclick="readMyMemories(this.id)" data-key="">
+                                                </td>
+                                                <td>
+                                                    <img id="myMemoriesPic8" class="img-responsive memoriesPic" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="Images could not load, please retry again" data-target="#editEntry" onclick="readMyMemories(this.id)" data-key="">
+                                                </td>
+                                                <td>
+                                                    <img id="myMemoriesPic9" class="img-responsive memoriesPic" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="Images could not load, please retry again" data-target="#editEntry" onclick="readMyMemories(this.id)" data-key="">
                                                 </td>
                                             </tr>
                                         </table>
