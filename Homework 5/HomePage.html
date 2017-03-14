@@ -97,9 +97,45 @@
         var futureMemoriesPicNameArray = [];
         var myMemoriesCount = 0;
         var myMemoriesBoundary = 0;
+        var myMemoriesCurrentWindow = 0;
         var futureMemoriesCount = 0;
         var futureMemoriesBoundary = 0;
+        var futureMemoriesCurrentWindow = 0;
         var storageRef = firebase.storage().ref();
+
+        function myMemoriesLeftArrow() {
+            if (myMemoriesCount - 9 < 0) {
+                return;
+            }
+            myMemoriesCount -= 9;
+            refreshMyMemories();
+
+        }
+
+        function myMemoriesRightArrow() {
+            if (myMemoriesCurrentWindow < 9) {
+                return;
+            }
+            myMemoriesCount += 9;
+            refreshMyMemories();
+        }
+
+        function futureMemoriesLeftArrow() {
+            if (futureMemoriesCount - 9 < 0) {
+                return;
+            }
+            futureMemoriesCount -= 9;
+            refreshFutureMemories();
+
+        }
+
+        function futureMemoriesRightArrow() {
+            if (futureMemoriesCurrentWindow < 9) {
+                return;
+            }
+            futureMemoriesCount += 9;
+            refreshFutureMemories();
+        }
 
         function loadMyMemoriesPreview() {
             var currName = null;
@@ -112,15 +148,19 @@
                 });
             }).then(function(){
                 console.log(myMemoriesKeyArray.toString());
+                myMemoriesCurrentWindow = 9;
                 if (myMemoriesKeyArray.length < myMemoriesBoundary) {
-                    myMemoriesBoundary = myMemoriesKeyArray.length;
+                    myMemoriesCurrentWindow = 9 - (myMemoriesBoundary - myMemoriesKeyArray.length);
+                    myMemoriesBoundary = myMemoriesKeyArray.length; 
+                }
+                else if (myMemoriesKeyArray.length == myMemoriesBoundary) {
+                    myMemoriesCurrentWindow = 0;
                 }
                 for (var i = myMemoriesCount; i < myMemoriesBoundary; i++) {
                     (function(counter) {
                         storageRef.child(myMemoriesPathArray[counter]).getDownloadURL().then(function(url) {
-                            var img = document.getElementById("myMemoriesPic" + (parseInt(counter) + 1));
+                            var img = document.getElementById("myMemoriesPic" + (parseInt(counter % 9) + 1));
                             img.src = url;
-                            //img.setAttribute("data-name", myMemoriesPicNameArray[counter]);
                             img.setAttribute("data-toggle", "modal");
                             img.setAttribute("data-key", myMemoriesKeyArray[counter]);
                         }).catch(function(error) {
@@ -128,20 +168,6 @@
                         });
                     })(i);
                 }
-                myMemoriesCount = myMemoriesCount + myMemoriesBoundary;
-
-                /*
-                myMemoriesPicNameArray.forEach(function(name, index){
-                    storageRef.child(currUser.uid + '/' + name).getDownloadURL().then(function(url) {
-                        var img = document.getElementById("myMemoriesPic" + (parseInt(index) + 1));
-                        img.src = url;
-                        img.setAttribute("data-name", name);
-                        img.setAttribute("data-toggle", "modal");
-                    }).catch(function(error) {
-                        console.log(error);
-                    });
-                });
-                */
             });
         }
 
@@ -160,42 +186,26 @@
                 });
             }).then(function(){
                 console.log(futureMemoriesPicNameArray.toString());
+                futureMemoriesCurrentWindow = 9;
                 if (futureMemoriesPicNameArray.length < futureMemoriesBoundary) {
+                    futureMemoriesCurrentWindow = 9 - (futureMemoriesBoundary - futureMemoriesPicNameArray.length);
                     futureMemoriesBoundary = futureMemoriesPicNameArray.length;
+                }
+                else if (futureMemoriesPicNameArray.length == futureMemoriesBoundary) {
+                    futureMemoriesCurrentWindow = 0;
                 }
                 for (var i = futureMemoriesCount; i < futureMemoriesBoundary; i++) {
                     (function(counter) {
                         storageRef.child(futureMemoriesPicNameArray[counter] + '.jpg').getDownloadURL().then(function(url) {
-                            var img = document.getElementById("futureMemoriesPic" + (parseInt(counter) + 1));
+                            var img = document.getElementById("futureMemoriesPic" + (parseInt(counter % 9) + 1));
                             img.src = url;
                             img.setAttribute("data-name", futureMemoriesPicNameArray[counter]);
                             img.setAttribute("data-toggle", "modal");
-                            counter.count++;
                         }).catch(function(error) {
                             console.log(error);
                         });
                     })(i);
-                }
-                futureMemoriesCount = futureMemoriesCount + futureMemoriesBoundary;
-
-                /*
-                futureMemoriesPicNameArray.forEach(function(name, index){
-                    console.log("before = " + counter.count);
-                    storageRef.child(name + '.jpg').getDownloadURL().then(function(url) {
-                        if (counter.count < boundary) {
-                            var img = document.getElementById("futureMemoriesPic" + (parseInt(index) + 1));
-                            img.src = url;
-                            img.setAttribute("data-name", name);
-                            img.setAttribute("data-toggle", "modal");
-                            counter.count++;
-                            console.log("futurecount = " + counter.count);
-                            console.log("boundary = " + boundary);
-                        }
-                    }).catch(function(error) {
-                        console.log(error);
-                    });
-                });
-                */                
+                }               
             });
         }
 
@@ -238,7 +248,9 @@
             var file = document.getElementById('fileUploadAdd').files[0];
             if (file) {
                 storageRef.child(currUser.uid + '/' + key).put(file).then(function(){
-                    refreshMyMemories();
+                    if (myMemoriesCurrentWindow < 9) {
+                        refreshMyMemories();
+                    }   
                 });
             }        
         }
@@ -459,7 +471,6 @@
                     });
                 }
             });
-            myMemoriesCount--;
 
             clearEditFields();
         }
@@ -527,10 +538,10 @@
                 img.removeAttribute("data-toggle");
                 img.src = "data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=";
             }
-            myMemoriesCount = 0;
+
             myMemoriesKeyArray = [];
             myMemoriesPathArray = [];
-            loadMyMemoriesPreview();
+            loadMyMemoriesPreview();           
         }
 
         function refreshFutureMemories(){
@@ -541,7 +552,6 @@
                 img.removeAttribute("data-toggle");
                 img.src = "data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=";
             }
-            futureMemoriesCount = 0;
             futureMemoriesPicNameArray = [];
             loadFutureMemoriesPreview();
         }
@@ -580,7 +590,7 @@
                             <table>
                                 <tr>
                                     <td>
-                                        <button class="glyphicon glyphicon-chevron-left btn-lg btn-info"></button>
+                                        <button class="glyphicon glyphicon-chevron-left btn-lg btn-info" onclick="myMemoriesLeftArrow()"></button>
                                     </td>
                                     <td class="img-panel">
                                         <table class="img-table">
@@ -620,7 +630,7 @@
                                         </table>
                                     </td>
                                     <td>
-                                        <button class="glyphicon glyphicon-chevron-right btn-lg btn-info"></button>
+                                        <button class="glyphicon glyphicon-chevron-right btn-lg btn-info" onclick="myMemoriesRightArrow()"></button>
                                     </td>
                                 </tr>
                             </table>
@@ -633,7 +643,7 @@
                             <table>
                                 <tr>
                                     <td>
-                                        <button class="glyphicon glyphicon-chevron-left btn-lg btn-info btn-block"></button>
+                                        <button class="glyphicon glyphicon-chevron-left btn-lg btn-info btn-block" onclick="futureMemoriesLeftArrow()"></button>
                                     </td>
                                     <td>
                                         <table class="img-table">
@@ -673,7 +683,7 @@
                                         </table>
                                     </td>
                                     <td>
-                                        <button class="glyphicon glyphicon-chevron-right btn-lg btn-info"></button>
+                                        <button class="glyphicon glyphicon-chevron-right btn-lg btn-info" onclick="futureMemoriesRightArrow()"></button>
                                     </td>
                                 </tr>
                             </table>
