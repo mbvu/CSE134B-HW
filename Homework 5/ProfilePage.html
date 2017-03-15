@@ -61,7 +61,6 @@
     <link type="text/css" rel="stylesheet" href="https://getbootstrap.com/dist/css/bootstrap.css" />
     <script src="https://www.gstatic.com/firebasejs/3.6.10/firebase.js"></script>
     <script>
-        // Initialize Firebase
         var config = {
             apiKey: "AIzaSyDsfuUcdBxzS-oGnzmLd3yHe6NTgLC05Ik",
             authDomain: "cse134b-25420.firebaseapp.com",
@@ -90,9 +89,8 @@
             reader.onloadend = function() {
                 preview.src = reader.result;
             }
-
             if (file) {
-                reader.readAsDataURL(file); //reads the data as a URL
+                reader.readAsDataURL(file); 
             } else {
                 preview.src = "";
             }
