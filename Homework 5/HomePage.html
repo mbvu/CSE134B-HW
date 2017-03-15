@@ -68,9 +68,21 @@
             width: 150px;
             height: 150px;
         }
+        div.memoriesTitle{
+            padding-left: 10px;
+            width: 140px;
+            height: 10px;
+            font-family: "Arial";
+            font-size: 14px;
+            font-weight: bold;
+        }
         td.memory-details{
             padding-bottom: 10px;
             padding-right: 4px;
+        }
+        #editDescription{
+            width: 100%;
+            resize: none;
         }
     </style>
     <script src="https://www.gstatic.com/firebasejs/3.6.10/firebase.js"></script>
@@ -94,6 +106,7 @@
         var currKey = null;
         var myMemoriesPathArray = [];
         var myMemoriesKeyArray = [];
+        var myMemoriesNameArray = [];
         var futureMemoriesPicNameArray = [];
         var myMemoriesCount = 0;
         var myMemoriesBoundary = 0;
@@ -145,9 +158,9 @@
                     currName = child.val().Name;
                     myMemoriesKeyArray.push(child.key);
                     myMemoriesPathArray.push(child.val().Path);          
+                    myMemoriesNameArray.push(child.val().Name);
                 });
             }).then(function(){
-                console.log(myMemoriesKeyArray.toString());
                 myMemoriesCurrentWindow = 9;
                 if (myMemoriesKeyArray.length < myMemoriesBoundary) {
                     myMemoriesCurrentWindow = 9 - (myMemoriesBoundary - myMemoriesKeyArray.length);
@@ -163,6 +176,8 @@
                             img.src = url;
                             img.setAttribute("data-toggle", "modal");
                             img.setAttribute("data-key", myMemoriesKeyArray[counter]);
+                            var title = document.getElementById("myMemoriesTitle" + (parseInt(counter % 9) + 1));
+                            title.innerHTML = myMemoriesNameArray[counter];
                         }).catch(function(error) {
                             console.log(error);
                         });
@@ -185,7 +200,6 @@
                     }                           
                 });
             }).then(function(){
-                console.log(futureMemoriesPicNameArray.toString());
                 futureMemoriesCurrentWindow = 9;
                 if (futureMemoriesPicNameArray.length < futureMemoriesBoundary) {
                     futureMemoriesCurrentWindow = 9 - (futureMemoriesBoundary - futureMemoriesPicNameArray.length);
@@ -201,6 +215,8 @@
                             img.src = url;
                             img.setAttribute("data-name", futureMemoriesPicNameArray[counter]);
                             img.setAttribute("data-toggle", "modal");
+                            var title =  document.getElementById("futureMemoriesTitle" + (parseInt(counter % 9) + 1));
+                            title.innerHTML = futureMemoriesPicNameArray[counter];
                         }).catch(function(error) {
                             console.log(error);
                         });
@@ -278,7 +294,7 @@
             }
 
             if (file) {
-                reader.readAsDataURL(file); //reads the data as a URL
+                reader.readAsDataURL(file); 
             } else {
                 preview.src = "";
             }
@@ -329,7 +345,6 @@
                     var img = document.getElementById("uploadPictureEdit");
                     img.src = url;
                 }).catch(function(error) {
-                    //handle errors
                 });
             });
         } 
@@ -340,6 +355,7 @@
             if (key == "")
                 return;
             firebase.database().ref('users/' + currUser.uid + '/myMemories' + "/" + key).once('value').then(function(snapshot) {
+                document.getElementById("editModalName").innerHTML = snapshot.val().Name;
                 document.getElementById("editName").value = snapshot.val().Name;
                 document.getElementById("editTags").value = snapshot.val().Tags;
                 document.getElementById("editDescription").value = snapshot.val().Description;
@@ -356,7 +372,6 @@
                     var img = document.getElementById("uploadPictureEdit");
                     img.src = url;
                 }).catch(function(error) {
-                    //handle errors
                 });
             });
         }
@@ -367,6 +382,7 @@
                 return;
             currFutureMemory = id;
             firebase.database().ref('users/' + currUser.uid + '/futureMemories' + "/" + name).once('value').then(function(snapshot) {
+                document.getElementById("futureModalName").innerHTML = snapshot.val().Name;
                 document.getElementById("futureName").value = snapshot.val().Name;
                 document.getElementById("futureCity").value = snapshot.val().City;
             });
@@ -375,7 +391,6 @@
                 var img = document.getElementById("futurePic");
                 img.src = url;
             }).catch(function(error) {
-                //handle errors
             });
         }
 
@@ -393,7 +408,7 @@
             var file = document.getElementById('fileUploadAdd').files[0];
             if (!file){
             	alert("Please enter a picture for this memory");
-            	return;
+                return;	
             }
 
             var addRef = firebase.database().ref('users/' + currUser.uid + '/myMemories').push({
@@ -420,6 +435,8 @@
 
             uploadFileAdd(key);
             clearAddFields();
+            $('#addEntry').modal('hide');
+
         }
 
         function updateMyMemories() {
@@ -457,6 +474,8 @@
 
             });
             clearEditFields();
+            $('#editEntry').modal('hide');
+
         }
     
         function deleteMyMemories() {
@@ -467,7 +486,6 @@
                             refreshMyMemories();
                         });
                     }).catch(function(error) {
-                        // Uh-oh, an error occurred!
                     });
                 }
                 else{
@@ -542,10 +560,14 @@
                 img.setAttribute("data-key", "");
                 img.removeAttribute("data-toggle");
                 img.src = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
+                var nameId = 'myMemoriesTitle' + i;
+                var name = document.getElementById(nameId);
+                name.innerHTML ="";
             }
 
             myMemoriesKeyArray = [];
             myMemoriesPathArray = [];
+            myMemoriesNameArray = [];
             loadMyMemoriesPreview();           
         }
 
@@ -556,6 +578,9 @@
                 img.setAttribute("data-name", "");
                 img.removeAttribute("data-toggle");
                 img.src = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
+                var nameId = 'futureMemoriesTitle' + i;
+                var name = document.getElementById(nameId);
+                name.innerHTML ="";
             }
             futureMemoriesPicNameArray = [];
             loadFutureMemoriesPreview();
@@ -601,35 +626,45 @@
                                         <table class="img-table">
                                             <tr>
                                                 <td>
+                                                    
                                                     <img id="myMemoriesPic1" class="img-responsive memoriesPic" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Images could not load, please retry again" data-target="#editEntry" onclick="readMyMemories(this.id)" data-key="">
+                                                    <div id="myMemoriesTitle1" class="memoriesTitle"></div>
                                                 </td>
                                                 <td>
                                                     <img id="myMemoriesPic2" class="img-responsive memoriesPic" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Images could not load, please retry again" data-target="#editEntry" onclick="readMyMemories(this.id)" data-key="">
+                                                    <div id="myMemoriesTitle2" class="memoriesTitle"></div>
                                                 </td>
                                                 <td>
                                                     <img id="myMemoriesPic3" class="img-responsive memoriesPic" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Images could not load, please retry again" data-target="#editEntry" onclick="readMyMemories(this.id)" data-key="">
+                                                    <div id="myMemoriesTitle3" class="memoriesTitle"></div>
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <td>
                                                     <img id="myMemoriesPic4" class="img-responsive memoriesPic" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Images could not load, please retry again" data-target="#editEntry" onclick="readMyMemories(this.id)" data-key="">
+                                                    <div id="myMemoriesTitle4" class="memoriesTitle"></div>
                                                 </td>
                                                 <td>
                                                     <img id="myMemoriesPic5" class="img-responsive memoriesPic" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Images could not load, please retry again" data-target="#editEntry" onclick="readMyMemories(this.id)" data-key="">
+                                                    <div id="myMemoriesTitle5" class="memoriesTitle"></div>
                                                 </td>
                                                 <td>
                                                     <img id="myMemoriesPic6" class="img-responsive memoriesPic" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Images could not load, please retry again" data-target="#editEntry" onclick="readMyMemories(this.id)" data-key="">
+                                                    <div id="myMemoriesTitle6" class="memoriesTitle"></div>
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <td>
                                                     <img id="myMemoriesPic7" class="img-responsive memoriesPic" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Images could not load, please retry again" data-target="#editEntry" onclick="readMyMemories(this.id)" data-key="">
+                                                    <div id="myMemoriesTitle7" class="memoriesTitle"></div>
                                                 </td>
                                                 <td>
                                                     <img id="myMemoriesPic8" class="img-responsive memoriesPic" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Images could not load, please retry again" data-target="#editEntry" onclick="readMyMemories(this.id)" data-key="">
+                                                    <div id="myMemoriesTitle8" class="memoriesTitle"></div>
                                                 </td>
                                                 <td>
                                                     <img id="myMemoriesPic9" class="img-responsive memoriesPic" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Images could not load, please retry again" data-target="#editEntry" onclick="readMyMemories(this.id)" data-key="">
+                                                    <div id="myMemoriesTitle9" class="memoriesTitle"></div>
                                                 </td>
                                             </tr>
                                         </table>
@@ -655,34 +690,43 @@
                                             <tr>
                                                 <td>
                                                     <img id="futureMemoriesPic1" class="img-responsive memoriesPic" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Images could not load, please retry again" data-target="#futureEntry" onclick="readFutureMemories(this.id)" data-name="">
+                                                    <div id="futureMemoriesTitle1" class="memoriesTitle"></div>
                                                 </td>
                                                 <td>
                                                     <img id="futureMemoriesPic2" class="img-responsive memoriesPic" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Images could not load, please retry again" data-target="#futureEntry" onclick="readFutureMemories(this.id)" data-name="">
+                                                    <div id="futureMemoriesTitle2" class="memoriesTitle"></div>
                                                 </td>
                                                 <td>
                                                     <img id="futureMemoriesPic3" class="img-responsive memoriesPic" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Images could not load, please retry again" data-target="#futureEntry" onclick="readFutureMemories(this.id)" data-name="">
+                                                    <div id="futureMemoriesTitle3" class="memoriesTitle"></div>
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <td>
                                                     <img id="futureMemoriesPic4" class="img-responsive memoriesPic" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Images could not load, please retry again" data-target="#futureEntry" onclick="readFutureMemories(this.id)" data-name="">
+                                                    <div id="futureMemoriesTitle4" class="memoriesTitle"></div>
                                                 </td>
                                                 <td>
                                                     <img id="futureMemoriesPic5" class="img-responsive memoriesPic" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Images could not load, please retry again" data-target="#futureEntry" onclick="readFutureMemories(this.id)" data-name="">
+                                                    <div id="futureMemoriesTitle5" class="memoriesTitle"></div>
                                                 </td>
                                                 <td>
                                                     <img id="futureMemoriesPic6" class="img-responsive memoriesPic" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Images could not load, please retry again" data-target="#futureEntry" onclick="readFutureMemories(this.id)" data-name="">
+                                                    <div id="futureMemoriesTitle6" class="memoriesTitle"></div>
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <td>
                                                     <img id="futureMemoriesPic7" class="img-responsive memoriesPic" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Images could not load, please retry again" data-target="#futureEntry" onclick="readFutureMemories(this.id)" data-name="">
+                                                    <div id="futureMemoriesTitle7" class="memoriesTitle"></div>
                                                 </td>
                                                 <td> 
                                                     <img id="futureMemoriesPic8" class="img-responsive memoriesPic" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Images could not load, please retry again" data-target="#futureEntry" onclick="readFutureMemories(this.id)" data-name="">
+                                                    <div id="futureMemoriesTitle8" class="memoriesTitle"></div>
                                                 </td>
                                                 <td>
                                                     <img id="futureMemoriesPic9" class="img-responsive memoriesPic" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Images could not load, please retry again" data-target="#futureEntry" onclick="readFutureMemories(this.id)" data-name="">
+                                                    <div id="futureMemoriesTitle9" class="memoriesTitle"></div>
                                                 </td>
                                             </tr>
                                         </table>
@@ -706,6 +750,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" onclick="clearEditFields()" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="editModalName">Name</h4>
                 </div>
                 <div class="modal-body">
                     <table>
@@ -728,7 +773,7 @@
                                         </tr>
                                         <tr>
                                             <td class="memory-details">Description</td>
-                                            <td class="memory-details"><input id="editDescription" class="field" type="text" ></td>
+                                            <td class="memory-details"><textarea id="editDescription" class="field" rows="4"></textarea></td>
                                         </tr>
                                         <tr>
                                             <td class="memory-details">Rating (1-10) </td>
@@ -738,10 +783,23 @@
                                     <br>
                                     <select id="editCity" class="field" name="ordinal">
                                         <option value="" selected disabled>Choose a City</option>
+                                        <option value="anaheim">Anaheim</option>
+                                        <option value="avalon">Avalon</option>
+                                        <option value="big-bear">Big Bear Lake</option>
+                                        <option value="la-jolla">La Jolla</option>
+                                        <option value="laguna-niguel">Laguna Niguel</option>
                                         <option value="los-angeles">Los Angeles</option>
-                                        <option value="san-francisco">San Francisco</option>
+                                        <option value="mammoth">Mammoth Lakes</option>
+                                        <option value="mariposa-city">Mariposa City</option>
+                                        <option value="palm-springs">Palm Springs</option>
                                         <option value="sacramento">Sacramento</option>
                                         <option value="san-diego">San Diego</option>
+                                        <option value="san-francisco">San Francisco</option>
+                                        <option value="santa-monica">Santa Monica</option>
+                                        <option value="tahoe">Tahoe</option>
+                                        <option value="universal-city">Universal City</option>
+                                        <option value="valencia">Valencia</option>
+                                        <option value="visalia">Visalia</option>
                                     </select>
                                     <br>
                                     <div class="field">
@@ -758,7 +816,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="deleteMyMemories()">Delete</button>
-                    <button type="button" data-dismiss="modal" onclick="updateMyMemories()" class="btn btn-primary">Save Changes</button>
+                    <button type="button" onclick="updateMyMemories()" class="btn btn-primary">Save Changes</button>
                 </div>
             </div>
         </div>
@@ -801,10 +859,23 @@
                                     <br>
                                     <select id="addCity" class="field" name="ordinal">
                                         <option value="" selected disabled>Choose a City</option>
+                                        <option value="anaheim">Anaheim</option>
+                                        <option value="avalon">Avalon</option>
+                                        <option value="big-bear">Big Bear Lake</option>
+                                        <option value="la-jolla">La Jolla</option>
+                                        <option value="laguna-niguel">Laguna Niguel</option>
                                         <option value="los-angeles">Los Angeles</option>
-                                        <option value="san-francisco">San Francisco</option>
+                                        <option value="mammoth">Mammoth Lakes</option>
+                                        <option value="mariposa-city">Mariposa City</option>
+                                        <option value="palm-springs">Palm Springs</option>
                                         <option value="sacramento">Sacramento</option>
                                         <option value="san-diego">San Diego</option>
+                                        <option value="san-francisco">San Francisco</option>
+                                        <option value="santa-monica">Santa Monica</option>
+                                        <option value="tahoe">Tahoe</option>
+                                        <option value="universal-city">Universal City</option>
+                                        <option value="valencia">Valencia</option>
+                                        <option value="visalia">Visalia</option>
                                     </select>
                                     <br>
                                     <div class="field">
@@ -820,7 +891,7 @@
                     </table>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" onclick="addData()" data-dismiss="modal" class="btn btn-primary">Add Memory</button>
+                    <button type="button" onclick="addData()" class="btn btn-primary">Add Memory</button>
                 </div>
             </div>
         </div>
@@ -834,6 +905,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="futureModalName">Name</h4>
                 </div>
                 <div class="modal-body">
                     <table>
@@ -854,13 +926,13 @@
                                         <option value="" selected disabled>Choose a City</option>
                                         <option value="anaheim">Anaheim</option>
                                         <option value="avalon">Avalon</option>
-                                        <option value="big-bear-lake">Big Bear Lake</option>
+                                        <option value="big-bear">Big Bear Lake</option>
                                         <option value="la-jolla">La Jolla</option>
                                         <option value="laguna-niguel">Laguna Niguel</option>
                                         <option value="los-angeles">Los Angeles</option>
-                                        <option value="mammoth-lakes">Mammoth Lakes</option>
+                                        <option value="mammoth">Mammoth Lakes</option>
                                         <option value="mariposa-city">Mariposa City</option>
-                                        <option value="palm-strings">Palm Springs</option>
+                                        <option value="palm-springs">Palm Springs</option>
                                         <option value="sacramento">Sacramento</option>
                                         <option value="san-diego">San Diego</option>
                                         <option value="san-francisco">San Francisco</option>
@@ -869,7 +941,6 @@
                                         <option value="universal-city">Universal City</option>
                                         <option value="valencia">Valencia</option>
                                         <option value="visalia">Visalia</option>
-                                        
                                     </select>
                                     <br>
                                 </div>
