@@ -390,6 +390,11 @@
                 alert("Please enter the fields for this memory");
                 return;
             }
+            var file = document.getElementById('fileUploadAdd').files[0];
+            if (!file){
+            	alert("Please enter a picture for this memory");
+            	return;
+            }
 
             var addRef = firebase.database().ref('users/' + currUser.uid + '/myMemories').push({
                 Name: name,
