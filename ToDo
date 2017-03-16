@@ -1,6 +1,7 @@
 List of Todos
 ___________________________________
 
-1. Implement functionality for 'Future Memories'
-2. Redesign UI/UX
-3. Perform Benchmarking and test on a limited connection
+1. Implement the ability to filter memories by their tag(s)
+2. Allow users to input their own city upon creating a memory
+3. Update UI/UX of the app
+4. Improve app efficiency by compressing images
