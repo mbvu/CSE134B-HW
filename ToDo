@@ -1,7 +1,3 @@
-List of Todos
-___________________________________
-
-1. Implement the ability to filter memories by their tag(s)
-2. Allow users to input their own city upon creating a memory
-3. Update UI/UX of the app
-4. Improve app efficiency by compressing images
+Even though we accomplished a good amount during these 10 weeks, we feel that there can still be improvements made. Specifically, we feel that users should be able to filter their memories by the tags so they can find specific ones easily. We would have also liked to allow users to input their own city upon creating a memory. We were unable to allow users to do this because we found it difficult to dynamically add entries to the database. 
+	We also would like to improve on the User Experience of our app. We feel that a major factor in our app’s success would be it’s aesthetics because of the crowd that it caters to. A future improvement to be made is to create a color scheme and theme that incites wanderlust in the users. That way, they would be more likely travel and use our app. Another improvement we would have liked to make is to compress the images, to improve load speed. One drawback of allowing images is that it takes up a large amount of bandwidth to send. As such, users with poor connections will have difficulty using the app. 
+	In our future endeavors, we will pay more attention to User Experience instead of Developer Experience because our apps are made for the user.
