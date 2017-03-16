@@ -63,3 +63,6 @@ HomePage: 1.60s load
 ProfilePage: 0.80s load
 
 Caching can greatly improve the performance of our app, since it is heavily based on images. After doing any CRUD operation on the HomePage, most images will be cached after initial load and the load time decreases by many factors.
+
+Authentication:
+For our backend we used the built in Firebase authentication service that allows the user to create an account using their own email address and password, along with Firebase’s integration with Google sign-in, allowing user to also be able to sign in with a Google account. 
